@@ -1,0 +1,4 @@
+node_modules
+.env
+UnitTest
+.DS_Store
