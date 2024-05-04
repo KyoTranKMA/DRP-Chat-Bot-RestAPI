@@ -12,13 +12,22 @@ class AccessService {
     static signUp = async ({ name, email, password }) => {
         try {
             // Check if account exists
-            const accountUser = await signUpModel.findOne({ email }).lean();
-            if (accountUser) {
+            const nameUser = await signUpModel.findOne({ name }).lean();
+            if (nameUser){
+                return  {
+                    code: 226,
+                    message: "User name already registered!"
+                }
+            }
+            const emailUser = await signUpModel.findOne({ email }).lean();
+            if (emailUser) {
                 return {
                     code: 226,
                     message: "Email already registered!",
                 };
             }
+
+
 
             // Create new account and hash password with Salt = 10 (default value)
             const hashPassword = await bcrypt.hash(password, 10);
@@ -62,7 +71,7 @@ class AccessService {
                     metadata: {
                         Account: getInfoData({
                             fields: ['_id', 'name', 'email'],
-                            object:  newAccount 
+                            object: newAccount
                         }),
                         tokens,
                     },
