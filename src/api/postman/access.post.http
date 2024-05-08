@@ -2,7 +2,7 @@
 
 ### /
 GET {{url_dev}}/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2M2E3NTEwNGYyYTBlYzBkMDVmMDdiYyIsIm5hbWUiOiJLeW8iLCJyb2xlIjoidXNlciIsImlhdCI6MTcxNTE2MTIyNCwiZXhwIjoxNzE1MjQ3NjI0fQ.-01PoJ35Sq0dXTbewKnmo2OkSvAfERD0zcxA6k0keWQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2M2I0OGZjMDk4MDBmMGU5YmI4ZTc1OCIsIm5hbWUiOiJLeW8xIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzE1MTYzNzgzLCJleHAiOjE3MTUyNTAxODN9.raaJrA3kJIdDvujsyxtQ2JF6ZHj3yWuoaOgY-W0nbU4
 
 ### /admin
 GET {{url_dev}}/admin
