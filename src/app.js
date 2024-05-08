@@ -29,10 +29,9 @@ app.use(express.urlencoded({
 }))
 
 // Render Swagger UI Documentation
-app.use('/', swaggerUI.serve,
+app.use('/docs', swaggerUI.serve,
 swaggerUI.setup(swaggerDocument, { customCssUrl: CSS_URL }));
 
-;
 // init db
 mongoose
 
