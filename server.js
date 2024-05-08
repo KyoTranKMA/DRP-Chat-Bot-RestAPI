@@ -1,5 +1,5 @@
 'strict mode'
-const app = require("./src/app");
+const app = require("./src/index");
 
 const PORT = process.env.PORT || 3055;
 

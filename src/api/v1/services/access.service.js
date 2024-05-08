@@ -63,7 +63,7 @@ class AccessService {
                 name: user.username,
                 role: user.role
             });
-    
+
             if (tokens) {
                 await keytokenModel.findOneAndUpdate(
                     { user: user._id },
@@ -85,6 +85,13 @@ class AccessService {
         } catch (error) {
             console.error(error);
             return { code: 500, message: "Internal Server Error" };
+        }
+    }
+
+    static logout = () => {
+        return {
+            code: 200,
+            message: "Đăng xuất tài khoản thành công"
         }
     }
 

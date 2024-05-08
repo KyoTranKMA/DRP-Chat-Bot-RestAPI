@@ -19,6 +19,14 @@ class AccessController {
             next(error);
         }
     }
+    logout = async (req, res, next) => {
+        try {
+            const logoutResult = await AccessService.logout();
+            res.status(logoutResult.code).json(logoutResult);
+        } catch (error) {
+            next(error);
+        }
+    }
     requestRefreshToken = async (req, res, next) => {
         try {
             const refreshResult = await AccessService.requestRefreshToken(req.body);

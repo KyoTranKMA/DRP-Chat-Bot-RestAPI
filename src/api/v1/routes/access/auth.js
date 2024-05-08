@@ -20,8 +20,6 @@ router.get('/admin',auth.verifyAdmin, (req, res, next) => {
         status: 'OK'
     })
 })
-
-
 //sign Up 
 router.post('/sign-up', accessController.signUp)
 router.get('/sign-up', (req, res, next) => {
@@ -32,10 +30,12 @@ router.get('/sign-up', (req, res, next) => {
 })   
 // login 
 router.post('/login', accessController.login)
+// logout  
+router.post('/logout', accessController.logout)
 // refresh token
 router.post('/refreshToken', accessController.requestRefreshToken)
 
-
+  
 
 
 module.exports = router

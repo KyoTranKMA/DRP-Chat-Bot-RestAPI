@@ -12,9 +12,19 @@ POST {{url_dev}}/sign-up
 Content-Type: application/json
 
 {
-    "username": "Kyo1",
-    "email": "quangdieu10092@gmail.com",
-    "password": "3awas"
+    "username": "TestUser",
+    "email": "testuser@example.com",
+    "password": "TestPassword123",
+    "role": "user",
+    "verify": false,
+    "info": {
+        "name": "Test User",
+        "age": 30,
+        "height": 170,
+        "dateOfBirth": "1992-01-01",
+        "weight": 70,
+        "bmi": 24.2
+    }
 }
 ### login
 POST {{url_dev}}/login
@@ -23,6 +33,12 @@ Content-Type: application/json
 {
     "username": "Kyo1",
     "password": "3awas"
+}
+### logout
+POST {{url_dev}}/logout
+Content-Type: application/json
+
+{
 }
 ### refresh token
 POST {{url_dev}}/refreshToken
