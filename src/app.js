@@ -12,7 +12,8 @@ const fs = require('fs')
 const path = require('path')
 const swaggerUi = require('swagger-ui-express')
 const swaggerDocument = yaml.parse(fs.readFileSync(path.resolve(__dirname, './api/v1/docs/swagger.yaml'), 'utf8'))
-
+// CDN CSS
+const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
 // require enviroment  from .env
 require('dotenv').config()
     
@@ -25,8 +26,10 @@ app.use(express.json())
 app.use(express.urlencoded({
     extended: true
 }))
-app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+// Render Swagger UI DOcumentation
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+swaggerUI.setup(specs, { customCssUrl: CSS_URL });
 // init db
 mongoose
 
