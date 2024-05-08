@@ -1,7 +1,6 @@
 'use strict'
 
 const express = require('express');
-const { model } = require('mongoose');
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
@@ -11,6 +10,6 @@ router.get('/', (req, res, next) => {
     })
 })
 
-router.use('/v1/api', require('./access'))
+router.use('/v1/api', require('./access/auth'))
 
 module.exports = router

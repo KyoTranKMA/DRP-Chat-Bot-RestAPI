@@ -1,10 +1,8 @@
 'use strict'
 const mongoose = require('mongoose')
+require('dotenv').config()
 
-//require db env from file config 
-const { db: { host, port, name }} = require('../../configs/config.mongodb.js') 
-
-const connectString = `mongodb://${host}:${port}/${name}`
+const connectString = process.env.MONGO_URI
 
 class Database {
     constructor() {
@@ -18,7 +16,6 @@ class Database {
             mongoose.set('debug', true)
             mongoose.set('debug', {color: true}) 
         }
-
         mongoose.connect(connectString).then( () => console.log('Connect to MongoDB Success!'))
         .catch(err => console.error('Connect to MongoDB Fail'))
     }   
@@ -28,10 +25,10 @@ class Database {
         if(!Database.instance){
             Database.instance = new Database()
         }
-
         return Database.instance
     }
 }
+
 
 const instanceMongodb = Database.getInstance()
 module.exports = instanceMongodb

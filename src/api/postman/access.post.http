@@ -1,11 +1,33 @@
-@url_dev = http://localhost:3055/v1/api
+@url_dev = http://localhost:3000/v1/api
 
+### /
+GET {{url_dev}}/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2M2E3NTEwNGYyYTBlYzBkMDVmMDdiYyIsIm5hbWUiOiJLeW8iLCJyb2xlIjoidXNlciIsImlhdCI6MTcxNTE2MTIyNCwiZXhwIjoxNzE1MjQ3NjI0fQ.-01PoJ35Sq0dXTbewKnmo2OkSvAfERD0zcxA6k0keWQ
+
+### /admin
+GET {{url_dev}}/admin
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2M2I0OGZjMDk4MDBmMGU5YmI4ZTc1OCIsIm5hbWUiOiJLeW8xIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzE1MTYzMDg2LCJleHAiOjE3MTUyNDk0ODZ9.oTeJMG0SnpKvnq2m_WMLiMa8E7r6wqATVAAfHkcQZ6c
 ### signup
 POST {{url_dev}}/sign-up
 Content-Type: application/json
 
 {
-    "name": "Kyo",
-    "email": "test23a@gmail.com",
+    "username": "Kyo1",
+    "email": "quangdieu10092@gmail.com",
     "password": "3awas"
+}
+### login
+POST {{url_dev}}/login
+Content-Type: application/json
+
+{
+    "username": "Kyo1",
+    "password": "3awas"
+}
+### refresh token
+POST {{url_dev}}/refreshToken
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2M2E3NTEwNGYyYTBlYzBkMDVmMDdiYyIsIm5hbWUiOiJLeW8iLCJyb2xlIjoidXNlciIsImlhdCI6MTcxNTE1ODk2OH0.cfkJ5uxhMUQltO01h-FAiy8NZqi8IxMq-GiXGX1DwwU"
 }

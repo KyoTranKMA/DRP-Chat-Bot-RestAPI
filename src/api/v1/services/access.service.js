@@ -1,95 +1,120 @@
 "use strict";
 
-const signUpModel = require("../models/sign-up.model");
+const userModel = require("../models/user.model.js");
 const bcrypt = require("bcrypt");
-const crypto = require("crypto");
 const keytokenModel = require("../models/keytoken.model");
-const { KeyTokenService } = require("./keyToken.service");
-const { createTokenPair } = require("../auth/authUtils");
+const { createToken, verifyRefreshToken } = require("../auth/authUtils");
 const { getInfoData } = require("../utils/index.js");
+const { find } = require("lodash");
+const { verify } = require("crypto");
 
 class AccessService {
-    static signUp = async ({ name, email, password }) => {
+    static signUp = async ({ username, email, password }) => {
         try {
             // Check if account exists
-            const nameUser = await signUpModel.findOne({ name }).lean();
-            if (nameUser){
-                return  {
-                    code: 226,
-                    message: "User name already registered!"
-                }
-            }
-            const emailUser = await signUpModel.findOne({ email }).lean();
-            if (emailUser) {
-                return {
-                    code: 226,
-                    message: "Email already registered!",
-                };
+            const existingUsername = await userModel.findOne({ username });
+            if (existingUsername) {
+                return { code: 400, message: "Tên tài khoản đã tồn tại" };
             }
 
+            const existingEmail = await userModel.findOne({ email });
+            if (existingEmail) {
+                return { code: 400, message: "Email đã tồn tại" };
+            }
 
-
-            // Create new account and hash password with Salt = 10 (default value)
             const hashPassword = await bcrypt.hash(password, 10);
-            const newAccount = await signUpModel.create({
-                name,
-                email,
+            const newAccount = await userModel.create({
+                username: username,
+                email: email,
                 password: hashPassword,
             });
 
             if (newAccount) {
-                const { privateKey, publicKey } = crypto.generateKeyPairSync(
-                    "rsa",
-                    {
-                        modulusLength: 4096,
-                    }
-                );
-
-                const publicKeyString = await KeyTokenService.createKeyToken({
-                    userId: newAccount._id,
-                    publicKey,
-                });
-
-                if (!publicKeyString) {
-                    return {
-                        code: "xxxx",
-                        message: "Public KeyString error",
-                    };
-                }
-
-                // Create token pair
-                const tokens = await createTokenPair(
-                    { userId: newAccount._id, email },
-                    publicKeyString,
-                    privateKey
-                );
-
-                console.log(`Created token success:`, tokens);
-
-                return {
-                    code: 200,
-                    metadata: {
-                        Account: getInfoData({
-                            fields: ['_id', 'name', 'email'],
-                            object: newAccount
-                        }),
-                        tokens,
-                    },
-                };
+                return { code: 201, message: "Đăng ký tài khoản thành công" };
             } else {
-                return {
-                    code: 200,
-                    metadata: null,
-                };
+                return { code: 400, message: "Đăng ký tài khoản không thành công" };
             }
         } catch (error) {
             console.error(error);
-            return {
-                code: 500,
-                message: "Internal Server Error",
-            };
+            return { code: 500, message: "Internal Server Error" };
         }
     };
+
+    static login = async ({ username, password }) => {
+        try {
+            // Find the user in the database
+            const user = await userModel.findOne({ username: username });
+            if (!user) {
+                return { code: 404, message: "Vui lòng nhập lại tên tài khoản" };
+            }
+
+            const verifyPassword = await bcrypt.compare(
+                password,
+                user.password
+            )
+            // Check password
+            if (!verifyPassword) {
+                return { code: 404, message: "Vui lòng nhập lại mật khẩu" };
+            }
+
+            // Create Access token for user
+            const tokens = await createToken({
+                id: user._id,
+                name: user.username,
+                role: user.role
+            });
+    
+            if (tokens) {
+                await keytokenModel.findOneAndUpdate(
+                    { user: user._id },
+                    { refreshToken: tokens.refreshToken, user: user._id },
+                    { upsert: true }
+                );
+                return {
+                    code: 200,
+                    Account: getInfoData({
+                        fields: ['id', 'username', 'email'],
+                        object: user
+                    }),
+                    tokens
+                }
+            }
+            else {
+                return { code: 400, message: "No tokens provided" };
+            }
+        } catch (error) {
+            console.error(error);
+            return { code: 500, message: "Internal Server Error" };
+        }
+    }
+
+    static requestRefreshToken = async (req, res, next) => {
+        const refreshToken = req.refreshToken;
+        if (!refreshToken) {
+            return { code: 401, message: "Empty token" };
+        }
+
+        const findToken = await keytokenModel.findOne({ refreshToken: refreshToken });
+
+        if (!findToken) {
+            return { code: 403, message: "Invalid token" };
+        }
+
+        await verifyRefreshToken(req, res, next);
+
+        const newToken = await createToken(
+            {
+                id: req.user.id,
+                name: req.user.name,
+                role: req.user.role
+            })
+
+        return {
+            code: 200,
+            message: "Access token refreshed successfully",
+            accessToken: newToken.accessToken
+        }
+    }
 }
 
 module.exports = {
