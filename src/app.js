@@ -6,6 +6,13 @@ const app = express()
 const mongoose = require('./api/v1/databases/init.mongodb.js')
 const router = express.Router();
 const { route } = require('./api/v1/routes/index.js')
+// Swagger UI
+const yaml = require('yaml')
+const fs = require('fs')
+const path = require('path')
+const swaggerUi = require('swagger-ui-express')
+const swaggerDocument = yaml.parse(fs.readFileSync(path.resolve(__dirname, './api/v1/docs/swagger.yaml'), 'utf8'))
+
 // require enviroment  from .env
 require('dotenv').config()
     
@@ -18,24 +25,13 @@ app.use(express.json())
 app.use(express.urlencoded({
     extended: true
 }))
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 // init db
 mongoose
-
-router.get('/', (req, res, next) => {
-    return res.status(200).json( {
-        message: 'Succesfully',
-        status: 'OK'
-    })
-})
 
 // init routes
 app.use( '/', require('./api/v1/routes/index.js'));
 
 
-const PORT = process.env.PORT || 3055;
-
-
-app.listen( PORT, () =>  {
-    console.log(`Server Running at: http://localhost:${PORT} `)
-})
+module.exports = app
