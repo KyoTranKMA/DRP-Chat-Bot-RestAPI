@@ -25,6 +25,7 @@ require('./api/v1/public/js/swagger-ui-bundle.min');
 require('./api/v1/public/js/swagger-ui-standalone-preset.min');
 const swaggerUi = require('swagger-ui-express')
 const swaggerJsDoc = require('swagger-jsdoc')
+var SwaggerUIBundle = require('swagger-ui-dist').SwaggerUIBundle
 const swaggerDocument = yaml.parse(fs.readFileSync(path.resolve(__dirname, './api/v1/docs/swagger.yaml'), 'utf8'))
 
 // require enviroment  from .env
