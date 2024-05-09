@@ -11,11 +11,11 @@ class Database {
     // connect
     connect(type = 'mongodb') {
         // check dev env
-        // if(1 === 1)
-        // {
-        //     mongoose.set('debug', true)
-        //     mongoose.set('debug', {color: true}) 
-        // }
+        if(1 === 2)
+        {
+            mongoose.set('debug', true)
+            mongoose.set('debug', {color: true}) 
+        }
         mongoose.connect(connectString).then( () => console.log('Connect to MongoDB Success!'))
         .catch(err => console.error('Connect to MongoDB Fail'))
     }   
