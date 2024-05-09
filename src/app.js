@@ -21,8 +21,7 @@ const css = fs.readFileSync(
 const CSS_URL =
   "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
 
-require('./api/v1/public/js/swagger-ui-bundle.min');
-require('./api/v1/public/js/swagger-ui-standalone-preset.min');
+
 const swaggerUi = require('swagger-ui-express')
 const swaggerJsDoc = require('swagger-jsdoc')
 var SwaggerUIBundle = require('swagger-ui-dist').SwaggerUIBundle
@@ -42,7 +41,7 @@ app.use(express.urlencoded({
 }))
 
 
-router.use(
+app.use(
   '/docs',
   swaggerUi.serve,
   swaggerUi.setup(swaggerDocument, { customCssUrl: CSS_URL })
@@ -51,7 +50,7 @@ router.use(
 mongoose
 
 // init routes
-router.use('/', require('./api/v1/routes/index.js'));
+app.use('/', require('./api/v1/routes/index.js'));
 
 
 module.exports = app
