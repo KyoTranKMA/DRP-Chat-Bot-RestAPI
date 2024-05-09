@@ -4,7 +4,6 @@ const { default: helmet } = require('helmet')
 const morgan = require('morgan')
 const app = express()
 const mongoose = require('./api/v1/databases/init.mongodb.js')
-const router = express.Router();
 const { route } = require('./api/v1/routes/index.js')
 
 
@@ -12,20 +11,14 @@ const { route } = require('./api/v1/routes/index.js')
 const yaml = require('yaml')
 const fs = require('fs')
 const path = require('path')
-const css = fs.readFileSync(
-  path.resolve(__dirname, '../node_modules/swagger-ui-dist/swagger-ui.css'),
-  'utf8'
-);
+
+const swaggerUi = require('swagger-ui-express')
+var SwaggerUIBundle = require('swagger-ui-dist').SwaggerUIBundle
+const swaggerDocument = yaml.parse(fs.readFileSync(path.resolve(__dirname, './api/v1/docs/swagger.yaml'), 'utf8'))
 // CDN CSS
 
 const CSS_URL =
   "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
-
-
-const swaggerUi = require('swagger-ui-express')
-const swaggerJsDoc = require('swagger-jsdoc')
-// var SwaggerUIBundle = require('swagger-ui-dist').SwaggerUIBundle
-const swaggerDocument = yaml.parse(fs.readFileSync(path.resolve(__dirname, './api/v1/docs/swagger.yaml'), 'utf8'))
 
 // require enviroment  from .env
 require('dotenv').config()
