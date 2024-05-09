@@ -24,7 +24,7 @@ const CSS_URL =
 
 const swaggerUi = require('swagger-ui-express')
 const swaggerJsDoc = require('swagger-jsdoc')
-var SwaggerUIBundle = require('swagger-ui-dist').SwaggerUIBundle
+// var SwaggerUIBundle = require('swagger-ui-dist').SwaggerUIBundle
 const swaggerDocument = yaml.parse(fs.readFileSync(path.resolve(__dirname, './api/v1/docs/swagger.yaml'), 'utf8'))
 
 // require enviroment  from .env
