@@ -6,22 +6,17 @@ const app = express()
 const mongoose = require('./api/v1/databases/init.mongodb.js')
 const { route } = require('./api/v1/routes/index.js')
 
-
-// Swagger UI
+// Swagger UI libs
 const yaml = require('yaml')
 const fs = require('fs')
 const path = require('path')
 const swaggerUi = require('swagger-ui-express')
-const swaggerJsDoc = require('swagger-jsdoc')
 var SwaggerUIBundle = require('swagger-ui-dist').SwaggerUIBundle
-const swaggerDocument = yaml.parse(fs.readFileSync(path.resolve(__dirname, './api/v1/docs/swagger.yaml'), 'utf8'))
-// CDN CSS
+const swaggerDocument = yaml.parse(fs.readFileSync(path.resolve(__dirname, './api/v1/public/swagger.yaml'), 'utf8'))
 
+// CDN CSS URL
 const CSS_URL =
   "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
-
-
-
 
 // require enviroment  from .env
 require('dotenv').config()
@@ -37,14 +32,19 @@ app.use(express.urlencoded({
 }))
 
 
-app.use(
-  '/',
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerDocument, { customCssUrl: CSS_URL })
-);
+
+
+// home page route
+app.get('/', (_, res) => {
+  res.sendFile(path.join(__dirname, './api/v1/public/homepage.html'));
+});
+
+// docs api routes
+app.use('/docs', swaggerUi.serve);
+app.get('/docs', swaggerUi.setup(swaggerDocument, { customCssUrl: CSS_URL }));
+
 // init db
 mongoose
-
 // init routes
 app.use('/', require('./api/v1/routes/index.js'));
 
