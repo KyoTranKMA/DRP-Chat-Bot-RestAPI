@@ -11,14 +11,17 @@ const { route } = require('./api/v1/routes/index.js')
 const yaml = require('yaml')
 const fs = require('fs')
 const path = require('path')
-
 const swaggerUi = require('swagger-ui-express')
+const swaggerJsDoc = require('swagger-jsdoc')
 var SwaggerUIBundle = require('swagger-ui-dist').SwaggerUIBundle
 const swaggerDocument = yaml.parse(fs.readFileSync(path.resolve(__dirname, './api/v1/docs/swagger.yaml'), 'utf8'))
 // CDN CSS
 
 const CSS_URL =
   "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
+
+
+
 
 // require enviroment  from .env
 require('dotenv').config()
@@ -35,7 +38,7 @@ app.use(express.urlencoded({
 
 
 app.use(
-  '/docs',
+  '/',
   swaggerUi.serve,
   swaggerUi.setup(swaggerDocument, { customCssUrl: CSS_URL })
 );
