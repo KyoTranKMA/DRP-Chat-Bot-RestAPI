@@ -11,10 +11,15 @@ const { route } = require('./api/v1/routes/index.js')
 const yaml = require('yaml')
 const fs = require('fs')
 const path = require('path')
-const swaggerUI = require('swagger-ui-express')
+const css = fs.readFileSync(
+    path.resolve(__dirname, '../node_modules/swagger-ui-dist/swagger-ui.css'),
+    'utf8'
+  );
+const swaggerUi = require('swagger-ui-express')
 const swaggerDocument = yaml.parse(fs.readFileSync(path.resolve(__dirname, './api/v1/docs/swagger.yaml'), 'utf8'))
-// CDN CSS
-const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
+const options =  swaggerUi.SwaggerUiOptions = {
+    customCss: css,
+  };
 // require enviroment  from .env
 require('dotenv').config()
     
@@ -27,18 +32,15 @@ app.use(express.json())
 app.use(express.urlencoded({
     extended: true
 }))
-
-// Render Swagger UI Documentation
 app.use(
-    '/docs',
-    swaggerUI.serve,
-    swaggerUI.setup(swaggerDocument, {
-      customCss:
-        '.swagger-ui .opblock .opblock-summary-path-description-wrapper { align-items: center; display: flex; flex-wrap: wrap; gap: 0 10px; padding: 0 10px; width: 100%; }',
-      customCssUrl: CSS_URL,
-    }),
-  );
-
+  '/docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, {
+    customCss:
+      '.swagger-ui .opblock .opblock-summary-path-description-wrapper { align-items: center; display: flex; flex-wrap: wrap; gap: 0 10px; padding: 0 10px; width: 100%; }',
+    customCssUrl: css,
+  }),
+);
 // init db
 mongoose
 
