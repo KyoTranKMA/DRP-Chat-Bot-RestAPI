@@ -11,6 +11,7 @@ const yaml = require('yaml')
 const fs = require('fs')
 const path = require('path')
 const swaggerUi = require('swagger-ui-express')
+const swaggerJsDoc = require('swagger-jsdoc')
 var SwaggerUIBundle = require('swagger-ui-dist').SwaggerUIBundle
 const swaggerDocument = yaml.parse(fs.readFileSync(path.resolve(__dirname, './api/v1/public/swagger.yaml'), 'utf8'))
 
@@ -38,7 +39,6 @@ app.use(express.urlencoded({
 app.get('/', (_, res) => {
   res.sendFile(path.join(__dirname, './api/v1/public/homepage.html'));
 });
-
 // docs api routes
 app.use('/docs', swaggerUi.serve);
 app.get('/docs', swaggerUi.setup(swaggerDocument, { customCssUrl: CSS_URL }));
