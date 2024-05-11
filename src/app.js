@@ -14,8 +14,7 @@ const swaggerUi = require('swagger-ui-express')
 const swaggerJsDoc = require('swagger-jsdoc')
 // get swagger document
 const swaggerDocument = yaml.parse(fs.readFileSync(path.resolve(__dirname, './api/v1/public/swagger.yaml'), 'utf8'))
-// get absolute for static file serving render ui
-const swaggerUiAssetPath = require("swagger-ui-dist").getAbsoluteFSPath()
+const swaggerUiAsset = require("swagger-ui-dist")
 // CDN CSS URL
 const CSS_URL =
   "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
@@ -43,6 +42,7 @@ app.get('/', (_, res) => {
 });
 // docs api routes
 app.use('/docs', swaggerUi.serve);
+app.use('/docs', express.static(swaggerUiAsset.getAbsoluteFSPath()));
 app.get('/docs', swaggerUi.setup(swaggerDocument, { customCssUrl: CSS_URL }));
 
 // init db
