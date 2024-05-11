@@ -12,7 +12,8 @@ const fs = require('fs')
 const path = require('path')
 const swaggerUi = require('swagger-ui-express')
 const swaggerJsDoc = require('swagger-jsdoc')
-var SwaggerUIBundle = require('swagger-ui-dist').SwaggerUIBundle
+var SwaggerUiDist = require('swagger-ui-dist')
+
 const swaggerDocument = yaml.parse(fs.readFileSync(path.resolve(__dirname, './api/v1/public/swagger.yaml'), 'utf8'))
 
 // CDN CSS URL
