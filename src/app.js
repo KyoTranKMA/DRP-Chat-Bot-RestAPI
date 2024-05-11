@@ -12,7 +12,7 @@ const fs = require('fs')
 const path = require('path')
 const swaggerUi = require('swagger-ui-express')
 const swaggerJsDoc = require('swagger-jsdoc')
-var SwaggerUiDist = require('swagger-ui-dist')
+var swaggerUiDist = require('swagger-ui-dist')
 
 const swaggerDocument = yaml.parse(fs.readFileSync(path.resolve(__dirname, './api/v1/public/swagger.yaml'), 'utf8'))
 
@@ -32,6 +32,8 @@ app.use(express.json())
 app.use(express.urlencoded({
   extended: true
 }))
+app.use(swaggerUiDist())
+app.use(swaggerJsDoc())
 
 
 
