@@ -38,6 +38,15 @@ var userSchema = new mongoose.Schema({
         default: false,
     },
     info: {
+        type: Object,
+        default: {
+            name: "",
+            age: null,
+            height: null,
+            dateOfBirth: null,
+            weight: null,
+            bmi: null
+        },
         name: {
             type: String,
             maxLength: 50,
