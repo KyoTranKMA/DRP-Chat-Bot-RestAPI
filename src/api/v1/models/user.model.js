@@ -1,7 +1,7 @@
 'use strict'
 
 const mongoose = require('mongoose');
-
+let validator = require('validator')
 // Table
 const COLLECTION_NAME = 'users'
 // Row
@@ -23,9 +23,11 @@ var userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        maxLength: 50,
         unique: true,
-    },
+        validate: (value) => {
+          return validator.isEmail(value)
+        }
+      },
     role: {
         type: String,
         enum: ['admin', 'contributor', 'user'],
