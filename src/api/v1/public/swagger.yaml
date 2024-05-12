@@ -4,6 +4,9 @@ info:
   description: Chi tiết về API để implment cho dự án
   version: 1.0.0
 servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/TranQuangDieu/API_Doc_Mobile_App/1.0.0
   - url: https://drpteam.vercel.app
 tags:
   - name: users
@@ -146,6 +149,18 @@ components:
         message:      
           type: string
           example: Đăng nhập thành công
+        account:
+          type: object
+          properties:
+            id: 
+              type: string
+              example: 663b48fc09800f0e9bb8e758
+            username: 
+              type: string
+              example: Kyo
+            email:
+              type: string
+              example: quangdieu10092@gmail.com
         tokens:
           properties:
             accessToken: 
@@ -154,6 +169,9 @@ components:
             refreshToken:
               type: string
               example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imt5byIsImlhdCI6MTYyNzQwNjYwMH0.7
+        apiKeyAIService:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
     signup:
       type: "object"
       properties:

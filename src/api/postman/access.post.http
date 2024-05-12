@@ -11,8 +11,8 @@ POST {{url_dev}}/sign-up
 Content-Type: application/json
 
 {
-    "username": "TestUser",
-    "email": "testuser@example.com",
+    "username": "TestUsaer",
+    "email": "testuaser@example.com",
     "password": "TestPassword123",
     "role": "user",
     "verify": false,

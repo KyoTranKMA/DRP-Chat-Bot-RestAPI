@@ -5,8 +5,9 @@ const bcrypt = require("bcrypt");
 const keytokenModel = require("../models/keytoken.model");
 const { createToken, verifyRefreshToken } = require("../auth/authUtils");
 const { getInfoData } = require("../utils/index.js");
-const { find } = require("lodash");
-const { verify } = require("crypto");
+// AI Service API
+require('dotenv').config()
+const COZE_API_KEY = process.env.COZE_API_KEY;
 
 class AccessService {
     static signUp = async ({ username, email, password }) => {
@@ -73,11 +74,12 @@ class AccessService {
                 return {
                     code: 200,
                     message: "Đăng nhập tài khoản thành công",
-                    Account: getInfoData({
+                    account: getInfoData({
                         fields: ['id', 'username', 'email'],
                         object: user
                     }),
-                    tokens
+                    tokens,
+                    apiKeyAIService: COZE_API_KEY
                 }
             }
             else {
