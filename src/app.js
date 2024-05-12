@@ -5,6 +5,7 @@ const morgan = require('morgan')
 const app = express()
 const mongoose = require('./api/v1/databases/init.mongodb.js')
 const { route } = require('./api/v1/routes/index.js')
+const cors = require('cors')
 
 // Swagger UI libs
 const yaml = require('yaml')
@@ -22,7 +23,6 @@ const CSS_URL =
 // require enviroment  from .env
 require('dotenv').config()
 
-
 // init middlewares
 app.use(morgan("dev"))
 app.use(helmet())
@@ -31,7 +31,11 @@ app.use(express.json())
 app.use(express.urlencoded({
   extended: true
 }))
-
+// cors for all domain
+app.use(cors({
+  origin: '*',
+  methods: 'GET, POST, PUT',
+}));
 
 
 
