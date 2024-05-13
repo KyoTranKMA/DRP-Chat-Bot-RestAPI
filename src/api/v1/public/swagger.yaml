@@ -6,8 +6,8 @@ info:
 servers:
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/TranQuangDieu/API_Doc_Mobile_App/1.0.0
-  - url: https://drpteam.vercel.app
+    url: https://drpteam.vercel.app
+  - url: https://api-kyotrankmas-projects.vercel.app
 tags:
   - name: users
     description: Các api liên quan tới user
