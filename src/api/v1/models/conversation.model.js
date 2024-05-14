@@ -22,8 +22,7 @@ const newConversationSchema = new mongoose.Schema(
             ref: "Bot",
         },
         conversation_id: {
-            type: String,
-            required: true,
+            type: Number,
         },
         query: {
             type: String,
@@ -74,18 +73,16 @@ const historyConversationSchema = new mongoose.Schema(
             ref: "Bot",
         },
         conversation_id: {
-            type: mongoose.Schema.Types.ObjectId, 
+            type: Number, 
             required: true,
             ref: "Conversation", 
         },
         query: {
-            type: String,
-            required: true,
+            type: String
         },
         chat_history: {
             type: Array,
             default: [],
-            ref: "Conversation.query"
         },
         stream: {
             type: Boolean,
@@ -98,20 +95,20 @@ const historyConversationSchema = new mongoose.Schema(
     }
 );
 // Trigger get chat_history based on conversation_id
-historyConversationSchema.pre('save', async function(next) {
-    try {
-        const conversations = await newConversationSchema.find({ conversation_id: this.conversation_id });
-        this.chat_history = conversations.map(conversation => conversation.query);
-        next();
-    } catch (error) {
-        next(error);
-    }
-});
+// historyConversationSchema.pre('save', async function(next) {
+//     try {
+//         const conversations = await newConversationSchema.find({ conversation_id: this.conversation_id });
+//         this.chat_history = conversations.map(conversation => conversation.query);
+//         next();
+//     } catch (error) {
+//         next(error);
+//     }
+// });
 
-// Export the models
+
 const NewConversation = mongoose.model('NewConversation', newConversationSchema);
 const HistoryConversation = mongoose.model('HistoryConversation', historyConversationSchema);
-
+// Export the models
 module.exports = { NewConversation, HistoryConversation };
 
 

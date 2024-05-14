@@ -1,0 +1,12 @@
+@url_dev = http://localhost:3000/v1/api
+### /
+
+POST {{url_dev}}/conversation
+Content-Type: application/json
+
+{
+    "queryString":"What is your name?" 
+    
+    
+
+}
