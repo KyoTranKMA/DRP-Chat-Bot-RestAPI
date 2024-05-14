@@ -23,6 +23,7 @@ const newConversationSchema = new mongoose.Schema(
         },
         conversation_id: {
             type: Number,
+            unique: true,
         },
         query: {
             type: String,
@@ -64,7 +65,6 @@ const historyConversationSchema = new mongoose.Schema(
     {
         user: {
             type: mongoose.Schema.Types.ObjectId,
-            required: true,
             ref: "User",
         },
         bot_id: {
@@ -74,6 +74,7 @@ const historyConversationSchema = new mongoose.Schema(
         },
         conversation_id: {
             type: Number, 
+            unique: true,
             required: true,
             ref: "Conversation", 
         },
@@ -106,9 +107,9 @@ const historyConversationSchema = new mongoose.Schema(
 // });
 
 
-const NewConversation = mongoose.model('NewConversation', newConversationSchema);
-const HistoryConversation = mongoose.model('HistoryConversation', historyConversationSchema);
+const NewConversationModel = mongoose.model('NewConversation', newConversationSchema);
+const HistoryConversationModel = mongoose.model('HistoryConversation', historyConversationSchema);
 // Export the models
-module.exports = { NewConversation, HistoryConversation };
+module.exports = { NewConversationModel, HistoryConversationModel };
 
 

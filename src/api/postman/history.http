@@ -1,0 +1,28 @@
+@url_dev = http://localhost:3000/v1/api
+
+### GET
+GET {{url_dev}}/history/conversation
+Content-Type: application/json
+
+{
+    "conversation_id":"1"
+}
+
+### PATCH
+PATCH {{url_dev}}/history/conversation
+Content-Type: application/json
+
+{
+    "query": ["What de fuck"],
+    "conversation_id":"1"
+}
+
+### POST
+POST  {{url_dev}}/history/conversation
+Content-Type: application/json
+
+{
+    "user": "663a75104f2a0ec0d05f07bc",
+    "query": ["Hi"],
+    "conversation_id":"1"
+}

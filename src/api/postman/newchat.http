@@ -5,8 +5,6 @@ POST {{url_dev}}/conversation
 Content-Type: application/json
 
 {
-    "queryString":"What is your name?" 
-    
-    
-
+    "user": "663b48fc09800f0e9bb8e758",
+    "query":"GOAT"
 }
