@@ -6,8 +6,8 @@ info:
 servers:
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
-    url: https://drpteam.vercel.app
-  - url: https://api-kyotrankmas-projects.vercel.app
+    url: https://virtserver.swaggerhub.com/TranQuangDieu/API_Doc_Mobile_App/1.0.0
+  - url: https://drpteam.vercel.app
 tags:
   - name: users
     description: Các api liên quan tới user
@@ -24,7 +24,7 @@ paths:
         content:
           application/json:
             schema: 
-              $ref: '#/components/schemas/LoginBody'
+              $ref: '#/components/schemas/loginBody'
         required: true
       responses:
         '200':
@@ -32,7 +32,7 @@ paths:
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/LoginSucces'      
+                $ref: '#/components/schemas/loginSucces'      
         '404':
           description: Tài khoản không chính xác
           content:
@@ -96,6 +96,52 @@ paths:
                   message:
                     type: string
                     example: Tên tài khoản đã tồn tại
+  /v1/api/authenticate:
+    post:
+      tags:
+        - users
+      summary: Authen token cho user
+      description: 'Xác thực access token cho mỗi phiên đăng nhập mà không cần đăng nhập bằng tài khoản, mật khẩu'
+      operationId: authenToken
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              type: object
+              properties:
+                accessToken:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2M2I0OGZjMDk4MDBmMGU5YmI4ZTc1OCIsIm5hbWUiOiJLeW8xIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzE1NzYxNTQ3LCJleHAiOjE3MTU4NDc5NDd9.HfbBdbl_5rPri59ToyP6WNm2S3MhA-2SzOtm2VtZ2Uc
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: "Xác thực thành công"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authenToken'
+                  
+        '400':
+          description: "Accesstoken không chính xác hoặc hết hạn"
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Token not valid
+        '401':
+          description: "Accesstoken rỗng"
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorize user"
   /v1/api/refreshToken:
     post:
       tags:
@@ -134,7 +180,7 @@ paths:
                     example: Invalid token
 components:
   schemas:
-    LoginBody:
+    loginBody:
       type: object
       properties:
         username:
@@ -143,7 +189,7 @@ components:
         password:
           type: string
           example: dieudeptrai
-    LoginSucces:
+    loginSucces:
       type: object
       properties:
         message:      
@@ -193,3 +239,9 @@ components:
         accessToken:
           type: string
           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imt5byIsImlhdCI6MTYyNzQwNjYwMCwiZXhwIjoxNjI3NDA2NjAwfQ.7
+    authenToken: 
+        type: object
+        properties:
+          status:
+            type: string
+            example: OK

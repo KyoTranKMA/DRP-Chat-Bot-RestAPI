@@ -38,6 +38,12 @@ router.post('/update/account',
 router.post('/login', AccessController.login)
 // logout  
 router.post('/logout', AccessController.logout)
+// authenticate token
+router.post('/authenticate', auth.verifyToken, (req, res, next) => {
+    return res.status(200).json({
+        status: 'OK'
+    })
+})
 // refresh token
 router.post('/refreshToken', AccessController.requestRefreshToken)
 

@@ -39,6 +39,11 @@ Content-Type: application/json
 
 {
 }
+### authenticate token
+POST {{url_dev}}/authenticate
+Authorization: Bearer 
+
+
 ### refresh token
 POST {{url_dev}}/refreshToken
 Content-Type: application/json
