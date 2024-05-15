@@ -11,17 +11,17 @@ POST {{url_dev}}/sign-up
 Content-Type: application/json
 
 {
-    "username": "TestUs2aer",
-    "email": "testua2ser@example.com",
-    "password": "TestPassword123"
+    "username": "tao",
+    "email": "tao@example.com",
+    "password": "tao"
 }
 ### login
 POST {{url_dev}}/login
 Content-Type: application/json
 
 {
-    "username": "Kyo1",
-    "password": "3awas"
+    "username": "tao",
+    "password": "tao"
 }
 ### logout
 POST {{url_dev}}/logout

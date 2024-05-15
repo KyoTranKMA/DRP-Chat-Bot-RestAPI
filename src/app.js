@@ -18,7 +18,7 @@ const swaggerDocument = yaml.parse(fs.readFileSync(path.resolve(__dirname, './ap
 const swaggerUiAsset = require("swagger-ui-dist")
 // CDN CSS URL
 const CSS_URL =
-  "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
+  "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.css";
 
 // require enviroment  from .env
 require('dotenv').config()
