@@ -11,19 +11,9 @@ POST {{url_dev}}/sign-up
 Content-Type: application/json
 
 {
-    "username": "TestUsaer",
-    "email": "testuaser@example.com",
-    "password": "TestPassword123",
-    "role": "user",
-    "verify": false,
-    "info": {
-        "name": "Test User",
-        "age": 30,
-        "height": 170,
-        "dateOfBirth": "1992-01-01",
-        "weight": 70,
-        "bmi": 24.2
-    }
+    "username": "TestUs2aer",
+    "email": "testua2ser@example.com",
+    "password": "TestPassword123"
 }
 ### login
 POST {{url_dev}}/login
@@ -41,7 +31,7 @@ Content-Type: application/json
 }
 ### authenticate token
 POST {{url_dev}}/authenticate
-Authorization: Bearer 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2M2I0OGZjMDk4MDBmMGU5YmI4ZTc1OCIsIm5hbWUiOiJLeW8xIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzE1NzY0NTI0LCJleHAiOjE3MTU4NTA5MjR9.Bew5r_83__5XcL9H_NKj9d79DcoejO_yMIVivVFpJ38
 
 
 ### refresh token

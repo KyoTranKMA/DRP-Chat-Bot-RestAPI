@@ -4,10 +4,8 @@ info:
   description: Chi tiết về API để implment cho dự án
   version: 1.0.0
 servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/TranQuangDieu/API_Doc_Mobile_App/1.0.0
-  - url: https://drpteam.vercel.app
+  -  url: https://drpteam.vercel.app
+  -  url: https://api-kyotrankmas-projects.vercel.app
 tags:
   - name: users
     description: Các api liên quan tới user
@@ -101,17 +99,8 @@ paths:
       tags:
         - users
       summary: Authen token cho user
-      description: 'Xác thực access token cho mỗi phiên đăng nhập mà không cần đăng nhập bằng tài khoản, mật khẩu'
+      description: 'Xác thực access token cho mỗi phiên đăng nhập mà không cần đăng nhập bằng tài khoản, mật khẩu. Lưu ý: Cần truyền vào header Authorization với giá trị là Bearer + accessToken'
       operationId: authenToken
-      requestBody:
-        content:
-          application/json:
-            schema: 
-              type: object
-              properties:
-                accessToken:
-                  type: string
-                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2M2I0OGZjMDk4MDBmMGU5YmI4ZTc1OCIsIm5hbWUiOiJLeW8xIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzE1NzYxNTQ3LCJleHAiOjE3MTU4NDc5NDd9.HfbBdbl_5rPri59ToyP6WNm2S3MhA-2SzOtm2VtZ2Uc
       security:
         - bearerAuth: []
       responses:
@@ -147,17 +136,8 @@ paths:
       tags:
         - users
       summary: Refresh token cho user
-      description: 'Refresh token cho user khi hết hạn accessToken và tạo ra accessToken mới để duy trì đăng nhập cho user'
+      description: 'Refresh token cho user khi hết hạn accessToken và tạo ra accessToken mới để duy trì đăng nhập cho user. Lưu ý: Cần truyền vào header Authorization với giá trị là Bearer + refreshToken'
       operationId: refreshToken
-      requestBody:
-        content:
-          application/json:
-            schema: 
-              type: object
-              properties:
-                refreshToken:
-                  type: string
-                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imt5byIsImlhdCI6MTYyNzQwNjYwMCwiZXhwIjoxNjI3NDA2NjAwfQ.7
       security:
         - bearerAuth: []
       responses:
@@ -245,3 +225,8 @@ components:
           status:
             type: string
             example: OK
+  securitySchemes:
+    bearerAuth:          
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    
