@@ -47,7 +47,7 @@ app.get('/', (_, res) => {
 // docs api routes
 app.use('/docs', swaggerUi.serve);
 app.use('/docs', express.static(swaggerUiAsset.getAbsoluteFSPath()));
-app.get('/docs', swaggerUi.setup(swaggerDocument, { customCssUrl: CSS_URL }));
+app.get('/docs', swaggerUi.setup(swaggerDocument));
 
 // init db
 mongoose
