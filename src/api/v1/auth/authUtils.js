@@ -13,8 +13,8 @@ const createToken = async (payload) => {
         })
         const refreshToken = await JWT.sign(payload,
             REFRESH_TOKEN_SECRET_KEY, {
-                algorithm: 'HS256'
-            } 
+            algorithm: 'HS256'
+        }
         )
         return { accessToken, refreshToken }
     }
@@ -27,40 +27,43 @@ const verifyToken = (req, res, next) => {
     const authorization = req.headers['authorization']
     const token = authorization.split(' ')[1];
     if (!token) {
-        return res.status(401).json('Unauthorize user')
+        return {
+            code: 401,
+            message: "Unauthorize user",
+        }
     }
     try {
         // Decode payload of user
-        const decoded = JWT.verify(token, ACCESS_TOKEN_SECRET_KEY); 
-        req.user = decoded
-        next()
-    } catch (e) {
-        res.status(400).json('Token not valid')
-    }
-}
-
-const verifyRefreshToken = (req , res , next) => {
-    if (!req.refreshToken) {
-        return res.status(401).json('Unauthorize user')
-    }
-    try {
-        // Decode payload of user
-        const decoded = JWT.verify(req.refreshToken, REFRESH_TOKEN_SECRET_KEY); 
+        const decoded = JWT.verify(token, ACCESS_TOKEN_SECRET_KEY);
         req.user = decoded
         next()
     } catch (e) {
         return {
-            code: 400, message: "Token not valid" 
+            code: 400,
+            message: "Token not valid",
+        }
+    }
+}
+
+const verifyRefreshToken = (req, res, next) => {
+    try {
+        // Decode payload of user
+        const decoded = JWT.verify(req.refreshToken, REFRESH_TOKEN_SECRET_KEY);
+        req.user = decoded
+        next()
+    } catch (e) {
+        return {
+            code: 400, message: "Token not valid"
         }
     }
 }
 
 const verifyAdmin = (req, res, next) => {
     verifyToken(req, res, () => {
-        if(req.user.role == 'admin'){
+        if (req.user.role == 'admin') {
             next();
         }
-        else{
+        else {
             res.status(403).json("Bạn không phải admin")
         }
     })

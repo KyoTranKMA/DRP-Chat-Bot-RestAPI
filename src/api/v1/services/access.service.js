@@ -3,7 +3,7 @@
 const userModel = require("../models/user.model.js");
 const bcrypt = require("bcrypt");
 const keytokenModel = require("../models/keytoken.model");
-const { createToken, verifyRefreshToken } = require("../auth/authUtils");
+const { createToken, verifyRefreshToken, verifyToken } = require("../auth/authUtils");
 const { getInfoData } = require("../utils/index.js");
 // AI Service API
 require('dotenv').config()
@@ -61,7 +61,7 @@ class AccessService {
             // Create Access token for user
             const tokens = await createToken({
                 id: user._id,
-                name: user.username,
+                username: user.username,
                 role: user.role
             });
 
@@ -115,7 +115,7 @@ class AccessService {
         const newToken = await createToken(
             {
                 id: req.user.id,
-                name: req.user.name,
+                username: req.user.name,
                 role: req.user.role
             })
 
@@ -123,6 +123,18 @@ class AccessService {
             code: 200,
             message: "Access token refreshed successfully",
             accessToken: newToken.accessToken
+        }
+    }
+    static authenToken = async (req, res, next) => {
+        await verifyToken(req, res, next);
+        return {
+            code: 200,
+            message: "Authen Successfully",
+            account: getInfoData({
+                fields: ['id', 'username'],
+                object: req.user
+            }),
+            apiKeyAIService: COZE_API_KEY
         }
     }
 }

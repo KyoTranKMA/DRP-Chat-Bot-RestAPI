@@ -39,11 +39,7 @@ router.post('/login', AccessController.login)
 // logout  
 router.post('/logout', AccessController.logout)
 // authenticate token
-router.post('/authenticate', auth.verifyToken, (req, res, next) => {
-    return res.status(200).json({
-        status: 'OK'
-    })
-})
+router.get('/authenticate', AccessController.authenToken)
 // refresh token
 router.post('/refreshToken', AccessController.requestRefreshToken)
 

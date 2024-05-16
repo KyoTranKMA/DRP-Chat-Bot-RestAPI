@@ -30,8 +30,8 @@ Content-Type: application/json
 {
 }
 ### authenticate token
-POST {{url_dev}}/authenticate
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2M2I0OGZjMDk4MDBmMGU5YmI4ZTc1OCIsIm5hbWUiOiJLeW8xIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzE1NzY0NTI0LCJleHAiOjE3MTU4NTA5MjR9.Bew5r_83__5XcL9H_NKj9d79DcoejO_yMIVivVFpJ38
+GET {{url_dev}}/authenticate
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDQ5MzI4NzU5MDIwZDUyMTdmZjg2MiIsInVzZXJuYW1lIjoidGFvIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3MTU4MjU3NzMsImV4cCI6MTcxNTkxMjE3M30.UWQGkoihuiAwD1AAW5ggqc02Fo80H6fyx4aLzItBnLw
 
 
 ### refresh token

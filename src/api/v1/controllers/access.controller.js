@@ -35,6 +35,14 @@ class AccessController {
             next(error);
         }
     }
+    authenToken = async (req, res, next) => {
+        try {
+            const authenResult = await AccessService.authenToken(req, res, next);
+            res.status(authenResult.code).json(authenResult);
+        } catch (error) {
+            next(error);
+        }
+    }
 
 
 }
