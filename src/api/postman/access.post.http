@@ -31,7 +31,8 @@ Content-Type: application/json
 }
 ### authenticate token
 GET {{url_dev}}/authenticate
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDQ5MzI4NzU5MDIwZDUyMTdmZjg2MiIsInVzZXJuYW1lIjoidGFvIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3MTU4MjU3NzMsImV4cCI6MTcxNTkxMjE3M30.UWQGkoihuiAwD1AAW5ggqc02Fo80H6fyx4aLzItBnLw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDQ5MzI4NzU5MDIwZDUyMTdmZjg2MiIsInVzZXJuYW1lIjoidGFvIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3MTU4MzEyNjAsImV4cCI6MTcxNTgzMTI3NX0.Kidb22eNsVxmO-yMgWwm2RYdb1ZcoHirjYO_9TJh8qU
+
 
 
 ### refresh token

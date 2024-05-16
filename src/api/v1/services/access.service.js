@@ -115,15 +115,25 @@ class AccessService {
         }
     }
     static authenToken = async (req, res, next) => {
-        await verifyToken(req, res, next);
-        return {
-            code: 200,
-            message: "Authen Successfully",
-            account: getInfoData({
-                fields: ['id', 'username'],
-                object: req.user
-            }),
-            apiKeyAIService: COZE_API_KEY
+        const result = await verifyToken(req, res, next);
+        if(result.code === 200)
+        {
+            return {
+                code: result.code,
+                message: result.message,
+                account: getInfoData({
+                    fields: ['id', 'username'],
+                    object: req.user
+                }),
+                apiKeyAIService: COZE_API_KEY
+            }
+        }
+        else
+        {
+            return {
+                code: result.code,
+                message: result.message
+            }
         }
     }
 }

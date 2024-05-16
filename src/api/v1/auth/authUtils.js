@@ -36,6 +36,10 @@ const verifyToken = (req, res, next) => {
         // Decode payload of user
         const decoded = JWT.verify(token, ACCESS_TOKEN_SECRET_KEY);
         req.user = decoded
+        return {
+            code: 200,
+            message: "Authen successfully",
+        }
         next()
     } catch (e) {
         return {
