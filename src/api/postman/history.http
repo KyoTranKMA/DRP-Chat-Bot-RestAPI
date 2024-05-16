@@ -13,8 +13,8 @@ PATCH {{url_dev}}/history/conversation
 Content-Type: application/json
 
 {
-    "query": ["What de fuck"],
-    "conversation_id":"1"
+    "query": "What the fuck man",
+    "conversation_id":"2"
 }
 
 ### POST
@@ -23,6 +23,6 @@ Content-Type: application/json
 
 {
     "user": "663a75104f2a0ec0d05f07bc",
-    "query": ["Hi"],
-    "conversation_id":"1"
+    "query": ["Hi Coze"],
+    "conversation_id":"2"
 }

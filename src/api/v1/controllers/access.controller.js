@@ -29,7 +29,7 @@ class AccessController {
     }
     requestRefreshToken = async (req, res, next) => {
         try {
-            const refreshResult = await AccessService.requestRefreshToken(req.body);
+            const refreshResult = await AccessService.requestRefreshToken(req, res ,next);
             res.status(refreshResult.code).json(refreshResult);
         } catch (error) {
             next(error);

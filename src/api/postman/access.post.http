@@ -35,9 +35,5 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDQ5MzI4N
 
 
 ### refresh token
-POST {{url_dev}}/refreshToken
-Content-Type: application/json
-
-{
-  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2M2I0OGZjMDk4MDBmMGU5YmI4ZTc1OCIsIm5hbWUiOiJLeW8xIsiwicm9sZSI6ImFskbWluIiwiaWF0IjoxNzE1MTkyOTMwfQ.KcDQIRRTeUcSFIYJySZN8GZ6y3R-qMwfzTesSET-aZk"
-}
+GET {{url_dev}}/refreshtoken
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDQ5MzI4NzU5MDIwZDUyMTdmZjg2MiIsInVzZXJuYW1lIjoidGFvIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3MTU4MjU3NzMsImV4cCI6MTcxNTkxMjE3M30.UWQGkoihuiAwD1AAW5ggqc02Fo80H6fyx4aLzItBnLw

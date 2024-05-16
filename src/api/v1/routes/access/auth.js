@@ -41,7 +41,7 @@ router.post('/logout', AccessController.logout)
 // authenticate token
 router.get('/authenticate', AccessController.authenToken)
 // refresh token
-router.post('/refreshToken', AccessController.requestRefreshToken)
+router.get('/refreshToken', AccessController.requestRefreshToken)
 
 
 

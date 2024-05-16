@@ -9,7 +9,7 @@ const createToken = async (payload) => {
     try {
         const accessToken = await JWT.sign(payload, ACCESS_TOKEN_SECRET_KEY, {
             algorithm: 'HS256',
-            expiresIn: '1 days'
+            expiresIn: '15s'
         })
         const refreshToken = await JWT.sign(payload,
             REFRESH_TOKEN_SECRET_KEY, {
@@ -46,14 +46,23 @@ const verifyToken = (req, res, next) => {
 }
 
 const verifyRefreshToken = (req, res, next) => {
+    const authorization = req.headers['authorization']
+    const token = authorization.split(' ')[1];
+    if (!token) {
+        return {
+            code: 401,
+            message: "Unauthorize user",
+        }
+    }
     try {
         // Decode payload of user
-        const decoded = JWT.verify(req.refreshToken, REFRESH_TOKEN_SECRET_KEY);
+        const decoded = JWT.verify(token, REFRESH_TOKEN_SECRET_KEY);
         req.user = decoded
         next()
     } catch (e) {
         return {
-            code: 400, message: "Token not valid"
+            code: 400,
+            message: "Token not valid",
         }
     }
 }

@@ -99,17 +99,6 @@ class AccessService {
     }
 
     static requestRefreshToken = async (req, res, next) => {
-        const refreshToken = req.refreshToken;
-        if (!refreshToken) {
-            return { code: 401, message: "Empty token" };
-        }
-
-        const findToken = await keytokenModel.findOne({ refreshToken: refreshToken });
-
-        if (!findToken) {
-            return { code: 403, message: "Invalid token" };
-        }
-
         await verifyRefreshToken(req, res, next);
 
         const newToken = await createToken(

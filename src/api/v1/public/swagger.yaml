@@ -130,7 +130,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Unauthorize user"
+                    example: Unauthorize user
   /v1/api/refreshToken:
     post:
       tags:
