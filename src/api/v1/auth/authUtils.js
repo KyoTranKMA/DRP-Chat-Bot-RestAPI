@@ -9,7 +9,7 @@ const createToken = async (payload) => {
     try {
         const accessToken = await JWT.sign(payload, ACCESS_TOKEN_SECRET_KEY, {
             algorithm: 'HS256',
-            expiresIn: '15s'
+            expiresIn: '60s'
         })
         const refreshToken = await JWT.sign(payload,
             REFRESH_TOKEN_SECRET_KEY, {
@@ -36,6 +36,7 @@ const verifyToken = (req, res, next) => {
         // Decode payload of user
         const decoded = JWT.verify(token, ACCESS_TOKEN_SECRET_KEY);
         req.user = decoded
+        console.log("req.user", req.user)
         return {
             code: 200,
             message: "Authen successfully",

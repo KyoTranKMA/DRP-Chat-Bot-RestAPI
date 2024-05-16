@@ -62,9 +62,9 @@ class AccessService {
             const tokens = await createToken({
                 id: user._id,
                 username: user.username,
-                role: user.role
+                role: user.role,
+                email: user.email
             });
-
             if (tokens) {
                 await keytokenModel.findOneAndUpdate(
                     { user: user._id },
@@ -104,7 +104,8 @@ class AccessService {
         const newToken = await createToken(
             {
                 id: req.user.id,
-                username: req.user.name,
+                username: req.user.username,
+                email: req.user.email,
                 role: req.user.role
             })
 
@@ -122,7 +123,7 @@ class AccessService {
                 code: result.code,
                 message: result.message,
                 account: getInfoData({
-                    fields: ['id', 'username'],
+                    fields: ['id', 'username', 'email'],
                     object: req.user
                 }),
                 apiKeyAIService: COZE_API_KEY
