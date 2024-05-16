@@ -95,7 +95,7 @@ paths:
                     type: string
                     example: Tên tài khoản đã tồn tại
   /v1/api/authenticate:
-    post:
+    get:
       tags:
         - users
       summary: Authen token cho user
@@ -132,7 +132,7 @@ paths:
                     type: string
                     example: Unauthorize user
   /v1/api/refreshToken:
-    post:
+    get:
       tags:
         - users
       summary: Refresh token cho user
@@ -146,10 +146,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/refreshToken'
-                  
-        '403':
-          description: "Refresh token thất bại"
+                $ref: '#/components/schemas/refreshToken' 
+        '400':
+          description: "Refresh Token không chính xác"
           content:
             application/json:
               schema: 
@@ -157,7 +156,17 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Invalid token
+                    example: Token not valid
+        '401':
+          description: "Refresh token rỗng"
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorize user
 components:
   schemas:
     loginBody:

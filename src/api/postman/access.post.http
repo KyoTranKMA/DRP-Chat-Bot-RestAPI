@@ -5,23 +5,23 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2M2I0OGZjM
 
 ### /admin
 GET {{url_dev}}/admin
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2M2I0OGZjMDk4MDBmMGU5YmI4ZTc1OCIsIm5hbWUiOiJLeW8xIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzE1MTYzMDg2LCJleHAiOjE3MTUyNDk0ODZ9.oTeJMG0SnpKvnq2m_WMLiMa8E7r6wqATVAAfHkcQZ6c
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDYzNjM4NzAyN2IyYzU1YWMyMGM2NSIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlhdCI6MTcxNTg3NzUyMCwiZXhwIjoxNzE1ODc3NTgwfQ.nJmfVan9y_ENfZh5ejUMlBzP6wbYgcFEq74drMZABVQ
 ### signup
 POST {{url_dev}}/sign-up
 Content-Type: application/json
 
 {
-    "username": "tao",
-    "email": "tao@example.com",
-    "password": "tao"
+    "username": "admin",
+    "email": "admin@gmail.com",
+    "password": "admin"
 }
 ### login
 POST {{url_dev}}/login
 Content-Type: application/json
 
 {
-    "username": "tao",
-    "password": "tao"
+    "username": "admin",
+    "password": "admin"
 }
 ### logout
 POST {{url_dev}}/logout
@@ -31,9 +31,9 @@ Content-Type: application/json
 }
 ### authenticate token
 GET {{url_dev}}/authenticate
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDQ5MzI4NzU5MDIwZDUyMTdmZjg2MiIsInVzZXJuYW1lIjoidGFvIiwiZW1haWwiOiJ0YW9AZXhhbXBsZS5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTcxNTgzMzg5NSwiZXhwIjoxNzE1ODMzOTU1fQ.qsBZR-vNkrQZLg1ssrPF28fQ7-A04mxu20pHNfvozTE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDQ5MzI4NzU5MDIwZDUyMTdmZjg2MiIsInVzZXJuYW1lIjoidGFvIiwiZW1haWwiOiJ0YW9AZXhhbXBsZS5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTcxNTg3NDY5NiwiZXhwIjoxNzE1ODc0NzU2fQ.-ALKEcbBcd6NqwRq14IGzj5F0DeBHZL6hpaNHnjGUWQ
 
 
 ### refresh token
 GET {{url_dev}}/refreshtoken
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDQ5MzI4NzU5MDIwZDUyMTdmZjg2MiIsInVzZXJuYW1lIjoidGFvIiwicm9sZSI6InVzZXIiLCJlbWFpbCI6InRhb0BleGFtcGxlLmNvbSIsImlhdCI6MTcxNTgzMzYzMH0.rJrZOM-hk0AOWizpT2_ZrlDKVFiPvE6NNsgtcMrvwjo
+Authorization: Bearer 

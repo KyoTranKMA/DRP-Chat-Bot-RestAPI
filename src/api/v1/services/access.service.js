@@ -3,7 +3,7 @@
 const userModel = require("../models/user.model.js");
 const bcrypt = require("bcrypt");
 const keytokenModel = require("../models/keytoken.model");
-const { createToken, verifyRefreshToken, verifyToken } = require("../auth/authUtils");
+const { createToken, verifyRefreshToken, verifyToken} = require("../auth/authUtils");
 const { getInfoData } = require("../utils/index.js");
 // AI Service API
 require('dotenv').config()
@@ -99,26 +99,31 @@ class AccessService {
     }
 
     static requestRefreshToken = async (req, res, next) => {
-        await verifyRefreshToken(req, res, next);
-
-        const newToken = await createToken(
-            {
-                id: req.user.id,
-                username: req.user.username,
-                email: req.user.email,
-                role: req.user.role
-            })
-
-        return {
-            code: 200,
-            message: "Access token refreshed successfully",
-            accessToken: newToken.accessToken
+        const result = await verifyRefreshToken(req, res, next);
+        if (result.code === 200) {
+            const newToken = await createToken(
+                {
+                    id: req.user.id,
+                    username: req.user.username,
+                    email: req.user.email,
+                    role: req.user.role
+                });
+            return {
+                code: result.code,
+                message: result.message,
+                accessToken: newToken.accessToken
+            }
+        }
+        else {
+            return {
+                code: result.code,
+                message: result.message
+            }
         }
     }
     static authenToken = async (req, res, next) => {
         const result = await verifyToken(req, res, next);
-        if(result.code === 200)
-        {
+        if (result.code === 200) {
             return {
                 code: result.code,
                 message: result.message,
@@ -129,8 +134,28 @@ class AccessService {
                 apiKeyAIService: COZE_API_KEY
             }
         }
-        else
-        {
+        else {
+            return {
+                code: result.code,
+                message: result.message
+            }
+        }
+    }
+
+    static verifyAdmin = async (req, res, next) => {
+        const result = await verifyToken(req, res, next);
+        if (result.code === 200 && req.user.role === 'admin') {
+            return {
+                code: result.code,
+                message: result.message,
+                account: getInfoData({
+                    fields: ['id', 'username', 'email'],
+                    object: req.user
+                }),
+                apiKeyAIService: COZE_API_KEY
+            }
+        }
+        else {
             return {
                 code: result.code,
                 message: result.message

@@ -43,6 +43,14 @@ class AccessController {
             next(error);
         }
     }
+    verifyAdmin = async (req, res, next) => {
+        try {
+            const verifyResult = await AccessService.verifyAdmin(req, res, next);
+            res.status(verifyResult.code).json(verifyResult);
+        } catch (error) {
+            next(error);
+        }
+    }
 
 
 }

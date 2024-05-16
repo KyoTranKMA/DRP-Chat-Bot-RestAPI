@@ -36,12 +36,10 @@ const verifyToken = (req, res, next) => {
         // Decode payload of user
         const decoded = JWT.verify(token, ACCESS_TOKEN_SECRET_KEY);
         req.user = decoded
-        console.log("req.user", req.user)
         return {
             code: 200,
             message: "Authen successfully",
         }
-        next()
     } catch (e) {
         return {
             code: 400,
@@ -63,7 +61,11 @@ const verifyRefreshToken = (req, res, next) => {
         // Decode payload of user
         const decoded = JWT.verify(token, REFRESH_TOKEN_SECRET_KEY);
         req.user = decoded
-        next()
+        console.log("req.user", req.user)
+        return {
+            code: 200,
+            message: "Authen successfully",
+        }
     } catch (e) {
         return {
             code: 400,
@@ -72,18 +74,8 @@ const verifyRefreshToken = (req, res, next) => {
     }
 }
 
-const verifyAdmin = (req, res, next) => {
-    verifyToken(req, res, () => {
-        if (req.user.role == 'admin') {
-            next();
-        }
-        else {
-            res.status(403).json("Bạn không phải admin")
-        }
-    })
-}
 
 
 module.exports = {
-    createToken, verifyToken, verifyAdmin, verifyRefreshToken
+    createToken, verifyToken, verifyRefreshToken
 }

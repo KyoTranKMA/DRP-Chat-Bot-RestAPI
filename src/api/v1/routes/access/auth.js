@@ -16,12 +16,13 @@ router.get('/', auth.verifyToken, (req, res, next) => {
 })
 
 // Test admin auth
-router.get('/admin', auth.verifyAdmin, (req, res, next) => {
+router.get('/admin', AccessController.verifyAdmin, (req, res, next) => {
     return res.status(200).json({
-        message: 'Authen Admin Succesfully',
+        message: 'Authen Succesfully',
         status: 'OK'
     })
 })
+
 //sign Up 
 router.post('/sign-up', AccessController.signUp)
 router.get('/sign-up', (req, res, next) => {
