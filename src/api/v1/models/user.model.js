@@ -1,8 +1,8 @@
 'use strict'
 
 const mongoose = require('mongoose');
-let validator = require('validator');
-const { Schema } = require('yaml');
+const validator = require('validator');
+const Schema = mongoose.Schema;
 // Table
 const COLLECTION_NAME = 'users'
 // Row
@@ -41,7 +41,7 @@ var userSchema = new mongoose.Schema({
     info: {
         type: Schema.Types.ObjectId,
         ref: 'User_info',
-        require: true,
+        required: true,    
     }
 }, {
     collection: COLLECTION_NAME,

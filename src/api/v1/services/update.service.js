@@ -12,29 +12,24 @@ class UpdateService {
             if (!existingUsername) {
                 return { code: 400, message: "Tên tài khoản không tồn tại" };
             }
-            console.log("existingUsername", existingUsername.id);
+
             const Account = await userInfoModel.findByIdAndUpdate(
-                existingUsername._id,
+                existingUsername.info,
                 {
                     $set: {
-                        'info.name': name,
-                        'info.age': age,
-                        'info.height': height,
-                        'info.dateOfBirth': dateOfBirth,
-                        'info.weight': weight,
-                        'info.bmi': bmi
+                        'name': name,
+                        'age': age,
+                        'height': height,
+                        'dateOfBirth': dateOfBirth,
+                        'weight': weight,
+                        'bmi': bmi
                     }
                 },
                 { new: true }
             );
-            console.log("Account", Account);
             if (Account) {
                 return {
-                    code: 201, message: "Cập nhật tài khoản thành công",
-                    Account: getInfoData({
-                        fields: ["_id", "username", "info"],
-                        object: Account
-                    })
+                    code: 201, message: "Cập nhật tài khoản thành công",    
                 };
             } else {
                 return { code: 400, message: "Cập nhật tài khoản không thành công" };

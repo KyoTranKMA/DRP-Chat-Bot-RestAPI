@@ -1,6 +1,7 @@
 "use strict";
 
 const userModel = require("../models/user.model.js");
+const userInfoModel = require("../models/user_info.model.js");
 const bcrypt = require("bcrypt");
 const keytokenModel = require("../models/keytoken.model");
 const { createToken, verifyRefreshToken, verifyToken} = require("../auth/authUtils");
@@ -23,12 +24,20 @@ class AccessService {
                 return { code: 400, message: "Email đã tồn tại" };
             }
 
+            const userInfo = new userInfoModel();
+            await userInfo.save();
+
             const hashPassword = await bcrypt.hash(password, 10);
             const newAccount = await userModel.create({
                 username: username,
                 email: email,
                 password: hashPassword,
+                info: userInfo._id
             });
+
+            userInfo.user = newAccount._id;
+            await userInfo.save();
+            
 
             if (newAccount) {
                 return { code: 201, message: "Đăng ký tài khoản thành công" };

@@ -5,11 +5,11 @@ POST {{url_dev}}/update/account
 Content-Type: application/json
 
 {
-    "username": "Kyo1",
-    "name": "Admin Dieu",
+    "username": "tao",
+    "name": "Tao là Bố",
     "age": 20,
     "height": 170,
-    "dateOfBirth": "1992-01-01",
+    "dateOfBirth": "2004-12-01",
     "weight": 70,
     "bmi": 24.2
 

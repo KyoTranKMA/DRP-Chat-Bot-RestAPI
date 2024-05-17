@@ -11,8 +11,8 @@ POST {{url_dev}}/sign-up
 Content-Type: application/json
 
 {
-    "username": "admin2",
-    "email": "admin2@gmail.com",
+    "username": "admin",
+    "email": "admin@gmail.com",
     "password": "admin"
 }
 ### login
@@ -31,7 +31,7 @@ Content-Type: application/json
 }
 ### authenticate token
 GET {{url_dev}}/authenticate
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDQ5MzI4NzU5MDIwZDUyMTdmZjg2MiIsInVzZXJuYW1lIjoidGFvIiwiZW1haWwiOiJ0YW9AZXhhbXBsZS5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTcxNTg3NDY5NiwiZXhwIjoxNzE1ODc0NzU2fQ.-ALKEcbBcd6NqwRq14IGzj5F0DeBHZL6hpaNHnjGUWQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDc3MzliMmU5ZTBiYzRmOGI4MGE3ZSIsInVzZXJuYW1lIjoidGFvIiwicm9sZSI6InVzZXIiLCJlbWFpbCI6InRhb0BnbWFpbC5jb20iLCJpYXQiOjE3MTU5NTg2OTksImV4cCI6MTcxNTk1ODc1OX0.am1HsSp2EHH91JNcYRi3HKqbY9SM-QAn6w9F2xLwLOA
 
 
 ### refresh token
