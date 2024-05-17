@@ -2,3 +2,4 @@ node_modules
 UnitTest
 .DS_Store
 .vercel
+.env

@@ -5,8 +5,8 @@ POST {{url_dev}}/update/account
 Content-Type: application/json
 
 {
-    "username": "Kyo",
-    "name": "Quang Diệu",
+    "username": "Kyo1",
+    "name": "Admin Dieu",
     "age": 20,
     "height": 170,
     "dateOfBirth": "1992-01-01",
