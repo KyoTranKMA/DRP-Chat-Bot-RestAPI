@@ -4,27 +4,6 @@ const { NewConversationModel, HistoryConversationModel } = require("../models/co
 const { getInfoData } = require("../utils/index.js");
 
 class ConversationService {
-    static getHistoryConversation = async ({ conversation_id }) => {
-        try {
-            const conversationId = conversation_id;
-            // Find the user in the database
-            const conversationHistory = await HistoryConversationModel.findOne({ conversation_id: conversationId });
-            if (!conversationHistory) {
-                return { code: 404, message: "Cuộc trò chuyện không tồn tại" };
-            }
-            return {
-                code: 200,
-                message: "Success",
-                data: getInfoData({
-                    fields: ['chat_history', 'createAt'],
-                    object: conversationHistory
-                })
-            };
-        } catch (error) {
-            console.error(error);
-            return { code: 500, message: "Internal Server Error" }
-        }
-    }
     static createConversation = async ({ query, user }) => {
         try {
             const userInfo = user;
@@ -56,6 +35,27 @@ class ConversationService {
                 code: 200,
                 message: "Success",
                 data: result
+            };
+        } catch (error) {
+            console.error(error);
+            return { code: 500, message: "Internal Server Error" }
+        }
+    }
+    static getHistoryConversation = async ({ conversation_id }) => {
+        try {
+            const conversationId = conversation_id;
+            // Find the user in the database
+            const conversationHistory = await HistoryConversationModel.findOne({ conversation_id: conversationId });
+            if (!conversationHistory) {
+                return { code: 404, message: "Cuộc trò chuyện không tồn tại" };
+            }
+            return {
+                code: 200,
+                message: "Success",
+                data: getInfoData({
+                    fields: ['chat_history', 'createAt'],
+                    object: conversationHistory
+                })
             };
         } catch (error) {
             console.error(error);
