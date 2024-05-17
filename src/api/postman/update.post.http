@@ -7,10 +7,9 @@ Content-Type: application/json
 {
     "username": "tao",
     "name": "Tao là Bố",
-    "age": 20,
-    "height": 170,
+    "age": 38,
+    "height": 171.5,
     "dateOfBirth": "2004-12-01",
-    "weight": 70,
-    "bmi": 24.2
+    "weight": 70
 
 }

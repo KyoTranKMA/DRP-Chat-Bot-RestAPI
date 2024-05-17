@@ -94,6 +94,31 @@ paths:
                   message:
                     type: string
                     example: Tên tài khoản đã tồn tại
+  /v1/api/update/account:
+    post:
+      tags:
+        - users
+      summary: Update thông tin cho user
+      description: 'Update thông tin cho user khi đã đăng nhập vào hệ thống'
+      operationId: updateAccount
+      responses:
+        '201':
+          description: "Cập nhật tài khoản thành công"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/updateAccount'
+                  
+        '400':
+          description: "Tên tài khoản không tồn tại"
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Tên tài khoản không tồn tại
   /v1/api/authenticate:
     get:
       tags:
@@ -231,9 +256,30 @@ components:
     authenToken: 
         type: object
         properties:
-          status:
+          message:
             type: string
-            example: OK
+            example: Authen successfully
+          account:
+            type: object
+            properties:
+              id: 
+                type: string
+                example: 663b48fc09800f0e9bb8e758
+              username: 
+                type: string
+                example: Kyo
+              email:
+                type: string
+                example: quangdieu10092@gmail.com
+          apiKeyAIService:
+            type: string
+            example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+    updateAccount: 
+        type: object
+        properties:
+          message:
+            type: string
+            example: Cập nhật tài khoản thành công
   securitySchemes:
     bearerAuth:          
       type: http
