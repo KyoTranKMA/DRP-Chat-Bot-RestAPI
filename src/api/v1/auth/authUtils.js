@@ -2,14 +2,16 @@
 
 const JWT = require('jsonwebtoken')
 require('dotenv').config()
+const keytokenModel = require("../models/keytoken.model");
 const ACCESS_TOKEN_SECRET_KEY = process.env.ACCESS_TOKEN_SECRET_KEY;
 const REFRESH_TOKEN_SECRET_KEY = process.env.REFRESH_TOKEN_SECRET_KEY
+
 
 const createToken = async (payload) => {
     try {
         const accessToken = await JWT.sign(payload, ACCESS_TOKEN_SECRET_KEY, {
             algorithm: 'HS256',
-            expiresIn: '60s'
+            expiresIn: '120s'
         })
         const refreshToken = await JWT.sign(payload,
             REFRESH_TOKEN_SECRET_KEY, {
@@ -48,10 +50,12 @@ const verifyToken = (req, res, next) => {
     }
 }
 
-const verifyRefreshToken = (req, res, next) => {
-    const authorization = req.headers['authorization']
-    const token = authorization.split(' ')[1];
-    if (!token) {
+const verifyRefreshToken = async(req, res, next) => {
+    const authorization = await req.headers['authorization']
+    const token = await authorization.split(' ')[1];
+    const checkValid = await keytokenModel.findOne({ refreshToken: token });
+
+    if (!token || !checkValid) {
         return {
             code: 401,
             message: "Unauthorize user",
@@ -61,7 +65,6 @@ const verifyRefreshToken = (req, res, next) => {
         // Decode payload of user
         const decoded = JWT.verify(token, REFRESH_TOKEN_SECRET_KEY);
         req.user = decoded
-        console.log("req.user", req.user)
         return {
             code: 200,
             message: "Authen successfully",

@@ -36,4 +36,4 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDc3YmM3M
 
 ### refresh token
 GET {{url_dev}}/refreshtoken
-Authorization: Bearer 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDc3YmM3MDI5ZDA2NTE4YWEzYzIwZCIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoidXNlciIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNzE2MDAzNDIxfQ.fniKVVnJtaAMIm8nUCBNu6-Jlc7ADqjy8zBscWuSnX0c

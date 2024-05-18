@@ -108,7 +108,9 @@ class AccessService {
     }
 
     static requestRefreshToken = async (req, res, next) => {
+
         const result = await verifyRefreshToken(req, res, next);
+        
         if (result.code === 200) {
             const newToken = await createToken(
                 {
