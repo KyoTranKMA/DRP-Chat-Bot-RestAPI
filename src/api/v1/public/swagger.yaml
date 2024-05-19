@@ -119,7 +119,7 @@ paths:
                     type: string
                     example: Tên tài khoản không tồn tại
   /v1/api/sendOTP:
-    get:
+    post:
       tags:
         - users
       summary: Gửi mã OTP
@@ -199,7 +199,7 @@ paths:
                     type: string
                     example: Lỗi hệ thống
   /v1/api/authenticate:
-    post:
+    get:
       tags:
         - users
       summary: Authen token cho user
