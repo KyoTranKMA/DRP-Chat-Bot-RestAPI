@@ -2,7 +2,6 @@
 
 const { AccessService } = require('../services/access.service');
 
-
 class AccessController {
     signUp = async (req, res, next) => {
         try {

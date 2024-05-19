@@ -4,9 +4,11 @@ const mongoose = require("mongoose");
 require('dotenv').config();
 const BOT_ID = process.env.BOT_ID;
 
-// Collection names
+// Collection names and document names
 const COLLECTION_NAME_1 = "conversation";
+const DOCUMENT_NAME1 = "NewConversation";
 const COLLECTION_NAME_2 = "conversation_history";
+const DOCUMENT_NAME2 = "HistoryConversation";
 
 // Declare the Schema of the Mongo model
 const newConversationSchema = new mongoose.Schema(
@@ -42,10 +44,10 @@ const newConversationSchema = new mongoose.Schema(
 
 
 // Trigger Auto generate conversation field auto increment
-newConversationSchema.pre('save', async function(next) {
+newConversationSchema.pre('save', async function (next) {
     try {
         if (this.isNew) {
-            const latestConversation = await this.constructor.findOne({}, {}, { sort: { 'createdAt' : -1 } });
+            const latestConversation = await this.constructor.findOne({}, {}, { sort: { 'createdAt': -1 } });
             if (latestConversation) {
                 const lastConversation = latestConversation.conversation_id;
                 const nextConversation = lastConversation + 1;
@@ -73,10 +75,10 @@ const historyConversationSchema = new mongoose.Schema(
             ref: "Bot",
         },
         conversation_id: {
-            type: Number, 
+            type: Number,
             unique: true,
             required: true,
-            ref: "Conversation", 
+            ref: "Conversation",
         },
         query: {
             type: String
@@ -107,8 +109,8 @@ const historyConversationSchema = new mongoose.Schema(
 // });
 
 
-const NewConversationModel = mongoose.model('NewConversation', newConversationSchema);
-const HistoryConversationModel = mongoose.model('HistoryConversation', historyConversationSchema);
+const NewConversationModel = mongoose.model(DOCUMENT_NAME1, newConversationSchema);
+const HistoryConversationModel = mongoose.model(DOCUMENT_NAME2, historyConversationSchema);
 // Export the models
 module.exports = { NewConversationModel, HistoryConversationModel };
 
