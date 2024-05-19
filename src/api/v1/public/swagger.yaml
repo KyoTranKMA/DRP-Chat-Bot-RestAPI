@@ -154,7 +154,7 @@ paths:
                     type: string
                     example: Gửi mã OTP không thành công
   /v1/api/verifyOTP:
-    get:
+    post:
       tags:
         - users
       summary: Xác nhận mã OTP
@@ -199,7 +199,7 @@ paths:
                     type: string
                     example: Lỗi hệ thống
   /v1/api/authenticate:
-    get:
+    post:
       tags:
         - users
       summary: Authen token cho user

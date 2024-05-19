@@ -1,14 +1,14 @@
 @url_dev = http://localhost:3000/v1/api
 
 ### /sendOTP
-GET {{url_dev}}/sendOTP
+POST {{url_dev}}/sendOTP
 Content-Type: application/json
 
 {
     "email": "quangdieuisme@gmail.com"
 }
 ### /verifyOTP
-GET {{url_dev}}/verifyOTP
+POST  {{url_dev}}/verifyOTP
 Content-Type: application/json
 
 {

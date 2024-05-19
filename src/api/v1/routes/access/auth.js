@@ -38,8 +38,8 @@ router.get('/authenticate', AccessController.authenToken)
 // refresh token
 router.get('/refreshToken', AccessController.requestRefreshToken)
 // send otp
-router.get('/sendOTP', OtpController.sendOTP);
-router.get('/verifyOTP', OtpController.verifyOTP);
+router.post('/sendOTP', OtpController.sendOTP);
+router.post('/verifyOTP', OtpController.verifyOTP);
 
 
 
