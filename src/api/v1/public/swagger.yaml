@@ -209,6 +209,64 @@ paths:
                   message:
                     type: string
                     example: Lỗi hệ thống
+  /v1/api/reset/getOTP:
+    post:
+      tags:
+        - users
+      summary: Gửi request để lấy mã OTP
+      description: Gửi mã OTP cho user để xác thực đây có phải email của user rồi sau đó người dùng mã OTP để reset password
+      operationId: sendOTP
+      requestBody:
+        description: Thông tin để gửi mã OTP
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/sendOTP'
+        required: true
+      responses:
+        '200':
+          description: Gửi mã OTP thành công
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Đã gửi mã OTP thành công
+        '500':
+          description: Lỗi server gửi mã OTP không thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Gửi mã OTP không thành công
+  /v1/api/reset/password:
+    post:
+      tags:
+        - users
+      summary: Gửi request để đổi mật khẩu
+      description: Sau khi nhận OTP từ email, người dùng sẽ gửi request để đổi mật khẩu
+      operationId: resetPassword
+      requestBody:
+        description: Thông tin để gửi reset password
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/resetPassword'
+        required: true
+      responses:
+        '200':
+          description: Đổi mật khẩu thành công
+        '400':
+          description: Mã OTP không chính xác
+        '404':
+          description: Email không tồn tại
+        '500':
+          description: Lỗi server đổi mật khẩu không thành công
   /v1/api/authenticate:
     get:
       tags:
@@ -340,6 +398,18 @@ components:
         email:
           type: "string"
           example: "Kyo@example.com"
+    resetPassword:
+      type: "object"
+      properties:
+        email:
+          type: "string"
+          example: "Kyo@example.com"
+        otp: 
+          type: "string"
+          example: "123456"
+        password:
+          type: "string"
+          example: "Dieudeptrai"
     updateBody:
       type: object
       properties:
