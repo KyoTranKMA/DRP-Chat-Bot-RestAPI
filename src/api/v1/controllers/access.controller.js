@@ -43,6 +43,14 @@ class AccessController {
             next(error);
         }
     }
+    resetPassword = async (req, res, next) => {
+        try {
+            const resetResult = await AccessService.resetPassword(req.body);
+            res.status(resetResult.code).json(resetResult);
+        } catch (error) {
+            next(error);
+        }
+    }
     verifyAdmin = async (req, res, next) => {
         try {
             const verifyResult = await AccessService.verifyAdmin(req, res, next);

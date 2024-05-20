@@ -1,19 +1,11 @@
 'use strict'
 
 const express = require('express')
-const auth = require('../../auth/authUtils.js')
 const AccessController = require('../../controllers/access.controller')
 const UpdateController = require('../../controllers/update.controller.js')
 const OtpController = require('../../controllers/otp.controller.js')
 const router = express.Router()
 
-
-router.get('/', auth.verifyToken, (req, res, next) => {
-    return res.status(200).json({
-        message: 'Authen Succesfully',
-        status: 'OK'
-    })
-})
 
 // Test admin auth
 router.get('/admin', AccessController.verifyAdmin, (req, res, next) => {
@@ -40,7 +32,10 @@ router.get('/refreshToken', AccessController.requestRefreshToken)
 // send otp
 router.post('/sendOTP', OtpController.sendOTP);
 router.post('/verifyOTP', OtpController.verifyOTP);
-
+// reset password
+router.post('/reset/password', AccessController.resetPassword);
+// get otp for reset password
+router.post('/reset/getOTP', OtpController.sendOTP)
 
 
 module.exports = router

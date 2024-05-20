@@ -11,8 +11,8 @@ POST {{url_dev}}/sign-up
 Content-Type: application/json
 
 {
-    "username": "kyo",
-    "email": "quangdieuisme@gmail.com",
+    "username": "csxsqwqwqwqwqqw",
+    "email": "csxsqwqwqwqwqqw@gmail.com",
     "password": "admin"
 }
 ### login
@@ -20,8 +20,8 @@ POST {{url_dev}}/login
 Content-Type: application/json
 
 {
-    "username": "admin",
-    "password": "admin"
+    "username": "csxsqwqwqwqwqqw",
+    "password": "123456"
 }
 ### logout
 POST {{url_dev}}/logout

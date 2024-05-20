@@ -70,5 +70,5 @@ class OtpService {
 }
 
 module.exports = {
-    OtpService,
+    OtpService
 };

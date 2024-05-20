@@ -2,6 +2,7 @@
 
 const userModel = require("../models/user.model.js");
 const userInfoModel = require("../models/user_info.model.js");
+const { OtpService } = require("./otp.service.js");
 const bcrypt = require("bcrypt");
 const keytokenModel = require("../models/keytoken.model");
 const { createToken, verifyRefreshToken, verifyToken} = require("../auth/authUtils");
@@ -38,7 +39,6 @@ class AccessService {
             userInfo.user = newAccount._id;
             await userInfo.save();
             
-
             if (newAccount) {
                 return { code: 201, message: "Đăng ký tài khoản thành công" };
             } else {
@@ -153,6 +153,27 @@ class AccessService {
         }
     }
 
+    static resetPassword = async ({email, otp, password}) => {
+        try {
+            const user = await userModel.findOne({ email});
+            if (!user) {
+                return { code: 404};
+            }
+            const verifyOTP = await OtpService.verifyOTP({email, otp});
+            if (verifyOTP.code !== 200) {
+                return { code: 400};
+            }
+            const hashPassword = await bcrypt.hash(password, 10);
+            await userModel.findOneAndUpdate({ email: email }, { password: hashPassword });
+            return { code: 200};
+        }
+        catch(error){
+            console.error(error);
+            return { code: 500};
+        }
+    }
+
+
     static verifyAdmin = async (req, res, next) => {
         const result = await verifyToken(req, res, next);
         if (result.code === 200 && req.user.role === 'admin') {
@@ -173,6 +194,7 @@ class AccessService {
             }
         }
     }
+    
 }
 
 module.exports = {
