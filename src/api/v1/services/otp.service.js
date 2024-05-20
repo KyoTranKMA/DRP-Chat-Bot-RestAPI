@@ -1,7 +1,7 @@
 const Otps = require('../models/otp.model.js');
 const randomstring = require('randomstring');
 const sendEmail = require('../auth/sendEmailUtils.js');
-
+const userModel = require("../models/user.model.js");
 
 class OtpService {
     // Generate OTP
@@ -48,6 +48,9 @@ class OtpService {
                     code: 400,
                 };
             }
+            // Update user verify status
+            await userModel.findOneAndUpdate({ email }, { verify: true });
+            
             await Otps.deleteOne({ email, otp });
             return {
                 success: true,

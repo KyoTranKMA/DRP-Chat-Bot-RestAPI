@@ -101,13 +101,24 @@ paths:
       summary: Update thông tin cho user
       description: 'Update thông tin cho user khi đã đăng nhập vào hệ thống'
       operationId: updateAccount
+      requestBody:
+        description: Thông tin cập nhật
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/updateBody'
+        required: true
       responses:
         '201':
           description: "Cập nhật tài khoản thành công"
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/updateAccount'
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Cập nhật tài khoản thành công
         '400':
           description: "Tên tài khoản không tồn tại"
           content:
@@ -329,6 +340,27 @@ components:
         email:
           type: "string"
           example: "Kyo@example.com"
+    updateBody:
+      type: object
+      properties:
+        username:
+          type: string
+          example: kyo
+        name:
+          type: string
+          example: Trần Quang Diệu
+        age: 
+          type: number
+          example: 18
+        height:
+          type: number
+          example: 171.5
+        dateOfBirth:
+          type: string
+          example: 2004-12-01
+        weight:
+          type: number
+          example: 70.5
     verifyOTP:
       type: "object"
       properties:
@@ -368,12 +400,6 @@ components:
           apiKeyAIService:
             type: string
             example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
-    updateAccount: 
-        type: object
-        properties:
-          message:
-            type: string
-            example: Cập nhật tài khoản thành công
   securitySchemes:
     bearerAuth:          
       type: http

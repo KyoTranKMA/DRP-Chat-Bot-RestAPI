@@ -11,8 +11,8 @@ POST {{url_dev}}/sign-up
 Content-Type: application/json
 
 {
-    "username": "admin",
-    "email": "admin@gmail.com",
+    "username": "kyo",
+    "email": "quangdieuisme@gmail.com",
     "password": "admin"
 }
 ### login
