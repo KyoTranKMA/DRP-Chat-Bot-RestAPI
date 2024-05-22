@@ -5,10 +5,15 @@ info:
   version: 1.0.0
 servers:
   -  url: https://drpteam.vercel.app
-  -  url: https://api-kyotrankmas-projects.vercel.app
+  -  url: https://drpteambackup.vercel.app
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/TranQuangDieu/API_Doc_Mobile_App/1.0.0
 tags:
   - name: users
     description: Các api liên quan tới user
+  - name: conversations
+    description: Các api liên quan tới cuộc trò chuyện
 paths:
   /v1/api/login: 
     post:
@@ -213,9 +218,9 @@ paths:
     post:
       tags:
         - users
-      summary: Gửi request để lấy mã OTP
+      summary: Gửi request để lấy mã OTP cho việc đổi mật khẩu
       description: Gửi mã OTP cho user để xác thực đây có phải email của user rồi sau đó người dùng mã OTP để reset password
-      operationId: sendOTP
+      operationId: getOTP
       requestBody:
         description: Thông tin để gửi mã OTP
         content:
@@ -340,6 +345,93 @@ paths:
                   message:
                     type: string
                     example: Unauthorize user
+  /v1/api/conversation/new:
+    post:
+      tags: 
+      - conversations
+      summary: Gửi request để lưu id của cuộc trò chuyện
+      description: Gửi request để lưu id của cuộc trò chuyện vào database server để tiện lưu vào history chat của user
+      operationId: conversation
+      requestBody:
+        description: id của user nhận lúc đăng nhập
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/newConversation'
+        required: true
+      responses:
+        '200':
+          description: Tạo cuộc trò chuyện thành công
+          content:
+            application/json:
+              schema: 
+                properties:
+                  conversations_id:
+                    type: number
+                    example: 1
+        '404':
+          description: id không tồn tại
+        '500':
+          description: Lỗi server
+  /v1/api/conversation/history:
+    post:
+      tags: 
+      - conversations
+      summary: Lưu lại lịch sử cuộc trò chuyện
+      description: Lưu lại lịch sử cuộc trò chuyện của user vào database server
+      operationId: conversationHistory
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/historyConversation'
+        required: true
+      responses:
+        '200':
+          description: Lưu cuộc trò chuyện thành công
+          content:
+            application/json:
+              schema: 
+                properties:
+                  conversations_id:
+                    type: number
+                    example: 4
+        '500':
+          description: Lỗi server
+  /v1/api/conversation/getHistory:
+    post:
+      tags: 
+      - conversations
+      summary: Lấy lịch sử cuộc trò chuyện
+      description: Lấy lịch sử cuộc trò chuyện của user trước đó
+      operationId: getConversationHistory
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/getHistoryConversation'
+        required: true
+      responses:
+        '200':
+          description: Lấy cuộc trò chuyện thành công
+          content:
+            application/json:
+              schema:          
+                properties: 
+                  data:
+                    type: object
+                    properties:
+                      history:
+                        type: array
+                        example: 
+                          - query: "Chào bot"
+                            response: "Chào tôi có thể giúp gì cho bạn"
+                          - query: "Hãy cho tôi công thức làm bánh mì"
+                            response: "Đây là công thức làm bánh mì...."
+        '404':
+          description: id không tồn tại       
+        '500':
+          description: Lỗi server
 components:
   schemas:
     loginBody:
@@ -470,8 +562,31 @@ components:
           apiKeyAIService:
             type: string
             example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+    newConversation:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 663b48fc09800f0e9bb8e758
+    historyConversation:
+      type: object
+      properties:
+        user:
+          type: string
+          example: 663a75104f2a0ec0d05f07bc
+        query:
+          type: string
+          example: Chào bot
+        conversation_id:
+          type: number
+          example: 4
+    getHistoryConversation:
+      properties:
+        user:
+          type: string
+          example: 663a75104f2a0ec0d05f07bc
   securitySchemes:
     bearerAuth:          
       type: http
       scheme: bearer
-      bearerFormat: JWT    
+      bearerFormat: JWT
