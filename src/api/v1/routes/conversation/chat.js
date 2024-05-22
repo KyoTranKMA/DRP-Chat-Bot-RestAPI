@@ -5,7 +5,7 @@ const ConversationController = require('../../controllers/conversation.controlle
 const router = express.Router()
 
 //new conversation 
-router.post('/conversation', ConversationController.saveNewChat)
+router.post('/conversation/new', ConversationController.saveNewChat)
 //history conversation 
 router.get('/history/conversation', ConversationController.getHistoryChat)
 router.patch('/history/conversation', ConversationController.updateHistoryChat)

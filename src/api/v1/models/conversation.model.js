@@ -18,49 +18,16 @@ const newConversationSchema = new mongoose.Schema(
             required: true,
             ref: "User",
         },
-        bot_id: {
-            type: Number,
-            default: BOT_ID,
-            ref: "Bot",
-        },
-        conversation_id: {
-            type: Number,
-            unique: true,
-        },
-        query: {
-            type: String,
-            required: true,
-        },
-        stream: {
-            type: Boolean,
-            default: true,
+        createdAt: {
+            type: Date,
+            default: Date.now,
         },
     },
     {
-        collection: COLLECTION_NAME_1,
-        timestamps: true,
+        collection: COLLECTION_NAME_1
     }
 );
 
-
-// Trigger Auto generate conversation field auto increment
-newConversationSchema.pre('save', async function (next) {
-    try {
-        if (this.isNew) {
-            const latestConversation = await this.constructor.findOne({}, {}, { sort: { 'createdAt': -1 } });
-            if (latestConversation) {
-                const lastConversation = latestConversation.conversation_id;
-                const nextConversation = lastConversation + 1;
-                this.conversation_id = nextConversation;
-            } else {
-                this.conversation_id = 1;
-            }
-        }
-        next();
-    } catch (error) {
-        next(error);
-    }
-});
 
 
 const historyConversationSchema = new mongoose.Schema(

@@ -1,10 +1,9 @@
 @url_dev = http://localhost:3000/v1/api
 ### /
 
-POST {{url_dev}}/conversation
+POST {{url_dev}}/conversation/new
 Content-Type: application/json
 
 {
-    "user": "663b48fc09800f0e9bb8e758",
-    "query":"GOAT"
+    "id": "664b281b7ced2282fcf02c2e"
 }

@@ -4,16 +4,13 @@ const { NewConversationModel, HistoryConversationModel } = require("../models/co
 const { getInfoData } = require("../utils/index.js");
 
 class ConversationService {
-    static createConversation = async ({ query, user }) => {
+    static createConversation = async ({ id }) => {
         try {
-            const userInfo = user;
-            const queryString = query;
-            console.log("query", queryString);
-            const result = await NewConversationModel.create({ query: queryString, user: userInfo});
+            const userID = id;
+            const result = await NewConversationModel.create({user: userID});
             return {
                 code: 200,
-                message: "Success",
-                data: result
+                conversation_id: result._id,
             };
         } catch (error) {
             console.error(error);
