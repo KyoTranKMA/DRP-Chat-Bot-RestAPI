@@ -47,7 +47,7 @@ app.use((req, res, next) => {
 
 // home page route
 app.get('/', (_, res) => {
-  res.sendFile(join(__dirname, './api/v1/public/homepage.html'));
+  res.sendFile(path.join(__dirname, './api/v1/public/homepage.html'));
 });
 // docs api routes
 app.use('/docs', swaggerUi.serve);

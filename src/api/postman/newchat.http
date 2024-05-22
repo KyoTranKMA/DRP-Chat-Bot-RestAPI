@@ -5,7 +5,7 @@ POST {{url_dev}}/conversation/init
 Content-Type: application/json
 
 {
-    "id": "664b289b7ced2282fcf12caa"
+    "id": "664775cf8786f00751600651",
 }
 
 ### /new Chat
@@ -13,4 +13,7 @@ POST {{url_dev}}/conversation/newChat
 Content-Type: application/json
 
 {
+    "id": "664775cf8786f00751600651",
+    "conversationId": "5f9b3b3b7b3b7b3b7b3b7b3b",
+    "query": "Hello"
 }

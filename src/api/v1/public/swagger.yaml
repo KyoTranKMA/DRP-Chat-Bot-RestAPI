@@ -345,19 +345,19 @@ paths:
                   message:
                     type: string
                     example: Unauthorize user
-  /v1/api/conversation/new:
+  /v1/api/conversation/init:
     post:
       tags: 
       - conversations
-      summary: Gửi request để lưu id của cuộc trò chuyện
-      description: Gửi request để lưu id của cuộc trò chuyện vào database server để tiện lưu vào history chat của user
+      summary: Khởi tạo cuộc trò chuyện khi bấm vào new chat 
+      description: Khởi tạo cuộc trò chuyện khi bấm vào new chat và nhận về id của cuộc trò chuyện
       operationId: conversation
       requestBody:
-        description: id của user nhận lúc đăng nhập
+        description: id là id của user nhận lúc đăng nhập
         content:
           application/json:
             schema: 
-              $ref: '#/components/schemas/newConversation'
+              $ref: '#/components/schemas/initConversation'
         required: true
       responses:
         '200':
@@ -368,41 +368,47 @@ paths:
                 properties:
                   conversations_id:
                     type: number
-                    example: 1
+                    example: 664e304950b332707fb0bbe0
         '404':
           description: id không tồn tại
         '500':
           description: Lỗi server
-  /v1/api/conversation/history:
+  /v1/api/conversation/newChat:
     post:
       tags: 
       - conversations
-      summary: Lưu lại lịch sử cuộc trò chuyện
-      description: Lưu lại lịch sử cuộc trò chuyện của user vào database server
+      summary: Gửi câu hỏi và nhận câu trả lời trong cuộc trò chuyện  
+      description: Gửi câu hỏi và nhận câu trả lời trong cuộc trò chuyện và server sẽ lưu lại lịch sử cuộc trò chuyện theo id của cuộc trò chuyện
       operationId: conversationHistory
       requestBody:
+        description: id là id của user nhận lúc đăng nhập
         content:
           application/json:
             schema: 
-              $ref: '#/components/schemas/historyConversation'
+              $ref: '#/components/schemas/newConversation'
         required: true
       responses:
         '200':
-          description: Lưu cuộc trò chuyện thành công
+          description: Nhận câu trả lời thành công
           content:
             application/json:
               schema: 
+                type: object
                 properties:
-                  conversations_id:
-                    type: number
-                    example: 4
+                    messages:
+                      type: object
+                      properties:
+                        content:
+                          type: string
+                          example: "Xin chào! Tôi là Trợ lý Dinh dưỡng. Tôi có thể giúp bạn với các câu hỏi về dinh dưỡng và chế độ ăn uống. Hãy cho tôi biết nếu bạn có bất kỳ câu hỏi nào."
+                    
         '500':
           description: Lỗi server
   /v1/api/conversation/getHistory:
     post:
       tags: 
       - conversations
-      summary: Lấy lịch sử cuộc trò chuyện
+      summary: Updating
       description: Lấy lịch sử cuộc trò chuyện của user trước đó
       operationId: getConversationHistory
       requestBody:
@@ -562,24 +568,24 @@ components:
           apiKeyAIService:
             type: string
             example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
-    newConversation:
+    initConversation:
       type: object
       properties:
         id:
           type: string
           example: 663b48fc09800f0e9bb8e758
-    historyConversation:
+    newConversation:
       type: object
       properties:
-        user:
+        id:
           type: string
           example: 663a75104f2a0ec0d05f07bc
-        query:
-          type: string
-          example: Chào bot
         conversation_id:
           type: number
-          example: 4
+          example: 664e304950b332707fb0bbe0
+        query:
+          type: string
+          example: Xin chào tôi cần tư vấn
     getHistoryConversation:
       properties:
         user:

@@ -29,7 +29,7 @@ class ConversationService {
             return { code: 500, message: "Internal Server Error" }
         }
     }
-    static newConversation = async ({ conversation_id, user, query }) => {
+    static newConversation = async ({ conversation_id, id, query }) => {
         try {
             const chatHistory = await HistoryConversationModel.findOneAndUpdate(
                 {
@@ -44,7 +44,7 @@ class ConversationService {
                         }
                     },
                     $set: {
-                        user: user
+                        user: id
                     }
                 },
                 {
