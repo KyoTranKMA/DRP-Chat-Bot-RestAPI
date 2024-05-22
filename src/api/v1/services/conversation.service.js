@@ -3,9 +3,7 @@
 const { NewConversationModel, HistoryConversationModel } = require("../models/conversation.model.js");
 // Lodash
 const { getInfoData } = require("../utils/index.js");
-// const fetch = require('node-fetch')
-const fetchPromise = import('node-fetch').then(mod => mod.default)
-const fetch = (...args) => fetchPromise.then(fetch => fetch(...args))
+const fetch = require('node-fetch')
 
 require('dotenv').config();
 // AI Service API env
