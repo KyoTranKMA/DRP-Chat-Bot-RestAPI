@@ -1,9 +1,16 @@
 @url_dev = http://localhost:3000/v1/api
 ### /
 
-POST {{url_dev}}/conversation/new
+POST {{url_dev}}/conversation/init
 Content-Type: application/json
 
 {
-    "id": "664b281b7ced2282fcf02c2e"
+    "id": "664b289b7ced2282fcf12caa"
+}
+
+### /new Chat
+POST {{url_dev}}/conversation/newChat
+Content-Type: application/json
+
+{
 }

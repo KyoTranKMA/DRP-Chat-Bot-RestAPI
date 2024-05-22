@@ -4,8 +4,6 @@ const { default: helmet } = require('helmet')
 const morgan = require('morgan')
 const app = express()
 const mongoose = require('./api/v1/databases/init.mongodb.js')
-const { route } = require('./api/v1/routes/index.js')
-const cors = require('cors')
 
 // Swagger UI libs
 const yaml = require('yaml')
@@ -32,17 +30,24 @@ app.use(express.urlencoded({
   extended: true
 }))
 // cors for all domain
-app.use(cors({
-  origin: '*',
-  methods: 'GET, POST, PUT',
-}));
-
-
-
+var corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Acces-Control-Allow-Headers":
+    "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization",
+  "Access-Control-Max-Age": "86400",
+};
+app.use((req, res, next) => {
+  res.set(corsHeaders);
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+  next();
+});
 
 // home page route
 app.get('/', (_, res) => {
-  res.sendFile(path.join(__dirname, './api/v1/public/homepage.html'));
+  res.sendFile(join(__dirname, './api/v1/public/homepage.html'));
 });
 // docs api routes
 app.use('/docs', swaggerUi.serve);

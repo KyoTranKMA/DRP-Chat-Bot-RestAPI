@@ -1,3 +1,4 @@
+"use strict"
 const Otps = require('../models/otp.model.js');
 const randomstring = require('randomstring');
 const sendEmail = require('../auth/sendEmailUtils.js');

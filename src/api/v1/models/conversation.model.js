@@ -1,12 +1,11 @@
 "use strict";
 
 const mongoose = require("mongoose");
-require('dotenv').config();
-const BOT_ID = process.env.BOT_ID;
+
 
 // Collection names and document names
 const COLLECTION_NAME_1 = "conversation";
-const DOCUMENT_NAME1 = "NewConversation";
+const DOCUMENT_NAME1 = "Conversation";
 const COLLECTION_NAME_2 = "conversation_history";
 const DOCUMENT_NAME2 = "HistoryConversation";
 
@@ -36,44 +35,30 @@ const historyConversationSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
         },
-        bot_id: {
-            type: Number,
-            default: BOT_ID,
-            ref: "Bot",
-        },
         conversation_id: {
-            type: Number,
+            type: mongoose.Schema.Types.ObjectId,
             unique: true,
             required: true,
             ref: "Conversation",
         },
-        query: {
-            type: String
-        },
         chat_history: {
-            type: Array,
-            default: [],
-        },
-        stream: {
-            type: Boolean,
-            default: true,
-        },
+            type: [
+                {
+                    _id: false,
+                    role: { type: String, default: "assistant"},
+                    content: { type: String, required: true },
+                    content_type: { type: String, default: "text" }
+                }
+            ],
+            default: [],          
+        }
     },
     {
         collection: COLLECTION_NAME_2,
         timestamps: true,
     }
 );
-// Trigger get chat_history based on conversation_id
-// historyConversationSchema.pre('save', async function(next) {
-//     try {
-//         const conversations = await newConversationSchema.find({ conversation_id: this.conversation_id });
-//         this.chat_history = conversations.map(conversation => conversation.query);
-//         next();
-//     } catch (error) {
-//         next(error);
-//     }
-// });
+
 
 
 const NewConversationModel = mongoose.model(DOCUMENT_NAME1, newConversationSchema);
