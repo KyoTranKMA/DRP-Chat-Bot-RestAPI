@@ -6,6 +6,7 @@ info:
 servers:
   -  url: https://drpteam.vercel.app
   -  url: https://drpteambackup.vercel.app
+  -  url: https://drpteam.zeabur.app
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/TranQuangDieu/API_Doc_Mobile_App/1.0.0
@@ -377,8 +378,8 @@ paths:
     post:
       tags: 
       - conversations
-      summary: Gửi câu hỏi và nhận câu trả lời trong cuộc trò chuyện  
-      description: Gửi câu hỏi và nhận câu trả lời trong cuộc trò chuyện và server sẽ lưu lại lịch sử cuộc trò chuyện theo id của cuộc trò chuyện
+      summary: Gửi câu hỏi và nhận câu trả lời trong cuộc trò chuyện
+      description:  "*Lưu ý: Vì hiện tại Vercel giới hạn thời chờ phản hồi là 10 giây nên đổi qua server <u>[Tại Đây](https://drpteam.zeabur.app)</u> nếu muốn test API này. "
       operationId: conversationHistory
       requestBody:
         description: id là id của user nhận lúc đăng nhập
@@ -412,7 +413,7 @@ paths:
                   content: "Có thực phẩm nào giúp tăng cường sức đề kháng không?"
                   content_type: "text"
                 - type: "follow_up"
-                  content: "Làm thế nào để giảm cân một cách lành mạnh?"
+                  content: "What's the current weather forecast?"
                   content_type: "text"
         '500':
           description: Lỗi server
@@ -421,7 +422,7 @@ paths:
       tags: 
       - conversations
       summary: Updating
-      description: Lấy lịch sử cuộc trò chuyện của user trước đó
+      description: Lấy lịch sử cuộc trò chuyện của user trước đó theo từng cuộc trò chuyện
       operationId: getConversationHistory
       requestBody:
         content:
@@ -434,18 +435,42 @@ paths:
           description: Lấy cuộc trò chuyện thành công
           content:
             application/json:
-              schema:          
-                properties: 
-                  data:
-                    type: object
-                    properties:
-                      history:
-                        type: array
-                        example: 
-                          - query: "Chào bot"
-                            response: "Chào tôi có thể giúp gì cho bạn"
-                          - query: "Hãy cho tôi công thức làm bánh mì"
-                            response: "Đây là công thức làm bánh mì...."
+              schema: 
+                type: array
+                items:
+                  type: object
+                  properties:
+                    role:
+                      type: string
+                    type:
+                      type: string
+                    content:
+                      type: string
+                    content_type:
+                      type: string
+              example:
+                messages::
+                - role: "user"
+                  content: "Xin chào! Tôi cần tư vấn"
+                  content_type: "text"
+                - role: "assistant"
+                  type: "answer"
+                  content: "Xin chào! Tôi là Trợ lý Dinh dưỡng. Tôi có thể giúp bạn với các câu hỏi về dinh dưỡng và chế độ ăn uống. Hãy cho tôi biết nếu bạn có bất kỳ câu hỏi nào.?"
+                  content_type: "text"
+                - role: "user"
+                  content: "Bạn có thể giới thiệu cho tôi về các loại thực phẩm giàu dinh dưỡng?"
+                  content_type: "text"
+                - role: "assistant"
+                  type: "answer"
+                  content: "Tất nhiên! Dưới đây là một số loại thực phẩm giàu dinh dưỡng mà bạn có thể bổ sung vào chế độ ăn hàng ngày của mình..."
+                  content_type: "text"
+                - role: "user"
+                  content: "Điều gì xảy ra nếu tôi không ăn đủ loại thực phẩm giàu dinh dưỡng?"
+                  content_type: "text"
+                - role: "assistant"
+                  type: "answer"
+                  content: "Nếu bạn không ăn đủ loại thực phẩm giàu dinh dưỡng, có thể xảy ra một số vấn đề sức khỏe. Dưới đây là một số hậu quả tiềm năng: Thiếu dinh dưỡng: Việc thiếu các chất dinh dưỡng quan trọng như vitamin, khoáng chất và chất xơ có thể gây ra các vấn đề sức khỏe như suy dinh dưỡng, suy giảm miễn dịch và tăng nguy cơ mắc bệnh."
+                  content_type: "text"
         '404':
           description: id không tồn tại       
         '500':
@@ -603,6 +628,9 @@ components:
         user:
           type: string
           example: 663a75104f2a0ec0d05f07bc
+        conversation_id:
+          type: string
+          example: 664e304950b332707fb0bbe0
   securitySchemes:
     bearerAuth:          
       type: http

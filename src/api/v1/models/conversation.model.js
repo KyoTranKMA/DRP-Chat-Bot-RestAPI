@@ -2,7 +2,6 @@
 
 const mongoose = require("mongoose");
 
-
 // Collection names and document names
 const COLLECTION_NAME_1 = "conversation";
 const DOCUMENT_NAME1 = "Conversation";
@@ -23,11 +22,9 @@ const newConversationSchema = new mongoose.Schema(
         },
     },
     {
-        collection: COLLECTION_NAME_1
+        collection: COLLECTION_NAME_1,
     }
 );
-
-
 
 const historyConversationSchema = new mongoose.Schema(
     {
@@ -41,17 +38,30 @@ const historyConversationSchema = new mongoose.Schema(
             required: true,
             ref: "Conversation",
         },
-        chat_history: {
-            type: [
-                {
-                    _id: false,
-                    role: { type: String, default: "assistant"},
-                    content: { type: String, required: true },
-                    content_type: { type: String, default: "text" }
+        chat_history: [
+            {
+                _id: false,
+                role: { 
+                    type: String, 
+                    enum: ["user", "assistant"], 
+                    required: true 
+                },
+                type: { 
+                    type: String, 
+                    enum: ["question", "answer"], 
+                    required: true 
+                },
+                content: { 
+                    type: String, 
+                    required: true 
+                },
+                content_type: { 
+                    type: String, 
+                    enum: ["text", "image", "video"], 
+                    default: "text" 
                 }
-            ],
-            default: [],          
-        }
+            }
+        ],
     },
     {
         collection: COLLECTION_NAME_2,
@@ -59,11 +69,8 @@ const historyConversationSchema = new mongoose.Schema(
     }
 );
 
-
-
 const NewConversationModel = mongoose.model(DOCUMENT_NAME1, newConversationSchema);
 const HistoryConversationModel = mongoose.model(DOCUMENT_NAME2, historyConversationSchema);
+
 // Export the models
 module.exports = { NewConversationModel, HistoryConversationModel };
-
-
