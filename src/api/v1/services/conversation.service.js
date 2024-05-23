@@ -9,7 +9,7 @@ require('dotenv').config();
 // AI Service API env
 const BOT_ID = process.env.BOT_ID;
 const COZE_API_KEY = process.env.COZE_API_KEY;
-
+const COZE_API_URL = process.env.COZE_API_URL;
 class ConversationService {
     static initConversation = async ({ id }) => {
         try {
@@ -68,7 +68,7 @@ class ConversationService {
             console.log("Request Body:", requestBody);
 
             const authHeader = COZE_API_KEY;
-            const response = await fetch("https://api.coze.com/open_api/v2/chat", {
+            const response = await fetch(COZE_API_URL, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
