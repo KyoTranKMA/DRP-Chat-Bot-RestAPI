@@ -393,15 +393,27 @@ paths:
           content:
             application/json:
               schema: 
-                type: object
-                properties:
-                    messages:
-                      type: object
-                      properties:
-                        content:
-                          type: string
-                          example: "Xin chào! Tôi là Trợ lý Dinh dưỡng. Tôi có thể giúp bạn với các câu hỏi về dinh dưỡng và chế độ ăn uống. Hãy cho tôi biết nếu bạn có bất kỳ câu hỏi nào."
-                    
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    content:
+                      type: string
+                    content_type:
+                      type: string
+              example:
+                messages::
+                - type: "answer"
+                  content: "Xin chào! Tôi là Trợ lý Dinh dưỡng. Tôi có thể giúp bạn với các câu hỏi về dinh dưỡng và chế độ ăn uống. Hãy cho tôi biết nếu bạn có bất kỳ câu hỏi nào.?"
+                  content_type: "text"
+                - type: "follow_up"
+                  content: "Có thực phẩm nào giúp tăng cường sức đề kháng không?"
+                  content_type: "text"
+                - type: "follow_up"
+                  content: "Làm thế nào để giảm cân một cách lành mạnh?"
+                  content_type: "text"
         '500':
           description: Lỗi server
   /v1/api/conversation/getHistory:
@@ -581,7 +593,7 @@ components:
           type: string
           example: 663a75104f2a0ec0d05f07bc
         conversation_id:
-          type: number
+          type: string
           example: 664e304950b332707fb0bbe0
         query:
           type: string

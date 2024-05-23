@@ -15,7 +15,7 @@ class ConversationService {
         try {
             const userID = id;
             const result = await NewConversationModel.create({ user: userID });
-            if(!result) {
+            if (!result) {
                 return { code: 404 };
             }
             return {
@@ -76,36 +76,25 @@ class ConversationService {
                 },
                 body: JSON.stringify(requestBody),
             });
-            
+
             const data = await response.json();
 
             // Check if the response is successful
             if (data.code === 0 && data.msg === "success") {
                 const messages = data.messages;
-                const answerMessage = messages.find(
-                    (message) =>
-                        message.role === "assistant" && message.type === "answer"
-                );
-
-                if (answerMessage) {
-                    const result = answerMessage.content.trim();
-
-                    const formattedResponse = {
-                        messages: {
-                            role: "assistant",
-                            content: result,
-                        }
-                    };
-                    return {
-                        code: 200,
-                        messages: getInfoData({
-                            fields: ['content'],
-                            object: formattedResponse.messages
-                        }),
-                    };
-                } else {
-                    return { code: 500, message: "No answer message found." }
-                }
+                const formattedMessages = messages
+                    .filter(message => message.role === "assistant" && (message.type === "answer" || message.type === "follow_up"))
+                    .map(message => {
+                        return {
+                            type: message.type,
+                            content: message.content.trim(),
+                            content_type: message.content_type,
+                        };
+                    });
+                return {
+                    code: 200,
+                    messages: formattedMessages
+                };
             } else {
                 return { code: 500, message: "Unexpected response from Coze API" }
             }
@@ -190,3 +179,8 @@ class ConversationService {
 module.exports = {
     ConversationService
 };
+
+
+
+
+
