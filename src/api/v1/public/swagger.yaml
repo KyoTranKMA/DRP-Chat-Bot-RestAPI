@@ -379,7 +379,7 @@ paths:
       tags: 
       - conversations
       summary: Gửi câu hỏi và nhận câu trả lời trong cuộc trò chuyện
-      description:  "*Lưu ý: Vì hiện tại Vercel giới hạn thời chờ phản hồi là 10 giây nên đổi qua server <u>[Tại Đây](https://drpteam.zeabur.app)</u> nếu muốn test API này. "
+      description:  "*Lưu ý: Vì hiện tại Vercel giới hạn thời chờ phản hồi là 10 giây nên đổi qua server của Zeabur <u>[Link Đây](https://drpteam.zeabur.app)</u> nếu muốn test API này. "
       operationId: conversationHistory
       requestBody:
         description: id là id của user nhận lúc đăng nhập
@@ -421,8 +421,8 @@ paths:
     post:
       tags: 
       - conversations
-      summary: Updating
-      description: Lấy lịch sử cuộc trò chuyện của user trước đó theo từng cuộc trò chuyện
+      summary: Lấy lịch sử cuộc trò chuyện
+      description: Lấy lịch sử cuộc trò chuyện theo id cuộc trò chuyện
       operationId: getConversationHistory
       requestBody:
         content:
@@ -472,7 +472,7 @@ paths:
                   content: "Nếu bạn không ăn đủ loại thực phẩm giàu dinh dưỡng, có thể xảy ra một số vấn đề sức khỏe. Dưới đây là một số hậu quả tiềm năng: Thiếu dinh dưỡng: Việc thiếu các chất dinh dưỡng quan trọng như vitamin, khoáng chất và chất xơ có thể gây ra các vấn đề sức khỏe như suy dinh dưỡng, suy giảm miễn dịch và tăng nguy cơ mắc bệnh."
                   content_type: "text"
         '404':
-          description: id không tồn tại       
+          description: Conversation id không tồn tại       
         '500':
           description: Lỗi server
 components:
@@ -625,9 +625,6 @@ components:
           example: Xin chào tôi cần tư vấn
     getHistoryConversation:
       properties:
-        user:
-          type: string
-          example: 663a75104f2a0ec0d05f07bc
         conversation_id:
           type: string
           example: 664e304950b332707fb0bbe0
