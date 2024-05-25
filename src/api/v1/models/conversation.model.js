@@ -48,8 +48,7 @@ const historyConversationSchema = new mongoose.Schema(
                 },
                 type: { 
                     type: String, 
-                    enum: ["question", "answer"], 
-                    required: true 
+                    enum: ["question", "answer"]
                 },
                 content: { 
                     type: String, 

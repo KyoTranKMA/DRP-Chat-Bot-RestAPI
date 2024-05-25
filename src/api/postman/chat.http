@@ -5,7 +5,15 @@ POST {{url_dev}}/conversation/init
 Content-Type: application/json
 
 {
-    "id": "664b289b7ced2282fcf02c3a"
+    "id": "663a75104f2a0ec0d05f07bc"
+}
+
+### /get Conversations by User
+POST {{url_dev}}/conversation/getConversations
+Content-Type: application/json
+
+{
+    "id": "663a75104f2a0ecad05f07bc" 
 }
 
 ### /new Chat
@@ -13,16 +21,18 @@ POST {{url_dev}}/conversation/newChat
 Content-Type: application/json
 
 {
-    "id": "664775cf8786f00751600651",
-    "conversation_id": "664fa77918c821bc51c1a83a",
-    "query": "Hãy cho tôi hình ảnh và công thức của món gà rón"
+    "id": "663a75104f2a0ecad05f07bc",
+    "conversation_id": "663a75104f2a0ecad05f07bc",
+    "query": "Hãy công thức của món gà rón"
 }
+
+
 
 ### /get History
 POST {{url_dev}}/conversation/getHistory
 Content-Type: application/json
 
 {
-    "conversation_id": "664fa77918c821bc51c1a83a"
+    "conversation_id": "663a75104f2a0ecad05f07bc"
 }
 

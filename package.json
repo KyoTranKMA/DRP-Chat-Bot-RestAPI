@@ -1,5 +1,5 @@
 {
-  "name": "daily-recipes-provider-app",
+  "name": "api-server-mobile-app",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",

@@ -12,6 +12,14 @@ class ConversationController {
             next(error);
         }
     }
+    getConversationsID = async (req, res, next) => {
+        try {
+            const result = await ConversationService.getConversationsID(req.body);
+            res.status(result.code).json(result);
+        } catch (error) {
+            next(error);
+        }
+    }
     newConversation = async (req, res, next) => {
         try {
             const result = await ConversationService.newConversation(req.body);

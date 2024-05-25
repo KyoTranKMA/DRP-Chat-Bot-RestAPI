@@ -1,8 +1,7 @@
 "use strict";
 
 const { NewConversationModel, HistoryConversationModel } = require("../models/conversation.model.js");
-// Lodash
-const { getInfoData } = require("../utils/index.js");
+const mongoose = require('mongoose');
 const fetch = require('node-fetch')
 
 require('dotenv').config();
@@ -14,7 +13,12 @@ class ConversationService {
     static initConversation = async ({ id }) => {
         try {
             const userID = id;
-            const result = await NewConversationModel.create({ user: userID });
+            if (!mongoose.Types.ObjectId.isValid(userID)) {
+                console.error("Invalid User ID");
+                return { code: 404 };
+            }
+            const result = await
+                NewConversationModel.create({ user: userID });
             if (!result) {
                 return { code: 404 };
             }
@@ -27,8 +31,38 @@ class ConversationService {
             return { code: 500, message: "Internal Server Error" }
         }
     }
+    // get Conversations ID by User ID
+    static getConversationsID = async ({ id }) => {
+        try {
+            const userID = id;
+            if (!mongoose.Types.ObjectId.isValid(userID)) {
+                console.error("Invalid User ID");
+                return { code: 404 };
+            }
+            const conversations = await HistoryConversationModel.find({ user: userID });
+
+            if (conversations.length === 0) {
+                return { code: 404 };
+            }
+            const formattedConversations = conversations.map(conversation => ({
+                conversation_id: conversation.conversation_id,
+                first_content: conversation.chat_history[0]?.content
+            }));
+            return {
+                code: 200,
+                data: formattedConversations
+            };
+        } catch (error) {
+            console.error("Error in getConversationID:", error);
+            return { code: 500, message: "Internal server error" };
+        }
+    };
     static newConversation = async ({ id, conversation_id, query }) => {
         try {
+            if (!mongoose.Types.ObjectId.isValid(conversation_id || id)) {
+                console.error("Invalid ID");
+                return { code: 404 };
+            }
             // Find the Conversation or create a new one and save user query
             const chatHistory = await HistoryConversationModel.findOneAndUpdate(
                 { conversation_id },
@@ -40,8 +74,8 @@ class ConversationService {
                             content_type: "text"
                         }
                     },
-                    $set: { 
-                        user: id 
+                    $set: {
+                        user: id
                     }
                 },
                 {
@@ -114,6 +148,10 @@ class ConversationService {
     };
     static getConversation = async ({ conversation_id }) => {
         try {
+            if (!mongoose.Types.ObjectId.isValid(conversation_id)) {
+                console.error("Invalid Conversation ID");
+                return { code: 404 };
+            }
             // Find the conversation by ID
             const chatHistory = await HistoryConversationModel.findOne({
                 conversation_id: conversation_id
@@ -133,7 +171,7 @@ class ConversationService {
             return { code: 500, message: "Internal server error" };
         }
     };
-   
+
 }
 module.exports = {
     ConversationService
