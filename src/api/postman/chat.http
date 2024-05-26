@@ -5,7 +5,7 @@ POST {{url_dev}}/conversation/init
 Content-Type: application/json
 
 {
-    "id": "663a75104f2a0ec0d05f07bc"
+    "id": "âs"
 }
 
 ### /get Conversations by User
@@ -13,7 +13,7 @@ POST {{url_dev}}/conversation/getConversations
 Content-Type: application/json
 
 {
-    "id": "663a75104f2a0ecad05f07bc" 
+    "id": "664775cf8786f00751600651" 
 }
 
 ### /new Chat
@@ -21,8 +21,7 @@ POST {{url_dev}}/conversation/newChat
 Content-Type: application/json
 
 {
-    "id": "663a75104f2a0ecad05f07bc",
-    "conversation_id": "663a75104f2a0ecad05f07bc",
+    "conversation_id": "",
     "query": "Hãy công thức của món gà rón"
 }
 

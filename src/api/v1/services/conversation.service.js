@@ -48,6 +48,7 @@ class ConversationService {
                 conversation_id: conversation.conversation_id,
                 first_content: conversation.chat_history[0]?.content
             }));
+            console.log(formattedConversations)
             return {
                 code: 200,
                 data: formattedConversations
@@ -59,6 +60,7 @@ class ConversationService {
     };
     static newConversation = async ({ id, conversation_id, query }) => {
         try {
+            console.log("New Conversation:", id, conversation_id, query);
             if (!mongoose.Types.ObjectId.isValid(conversation_id || id)) {
                 console.error("Invalid ID");
                 return { code: 404 };

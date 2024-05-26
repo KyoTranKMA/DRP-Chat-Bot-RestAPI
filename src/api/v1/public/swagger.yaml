@@ -4,9 +4,10 @@ info:
   description: Chi tiết về API để implment cho dự án
   version: 1.0.0
 servers:
+  -  url: https://drpteam.zeabur.app
   -  url: https://drpteam.vercel.app
   -  url: https://drpteambackup.vercel.app
-  -  url: https://drpteam.zeabur.app
+  -  url: https://drpteam.up.railway.app
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/TranQuangDieu/API_Doc_Mobile_App/1.0.0
@@ -368,8 +369,44 @@ paths:
               schema: 
                 properties:
                   conversations_id:
-                    type: number
+                    type: string
                     example: 664e304950b332707fb0bbe0
+        '404':
+          description: id không tồn tại
+        '500':
+          description: Lỗi server
+  /v1/api/conversation/getConversations:
+    post:
+      tags: 
+      - conversations
+      summary: Lấy conversation_id từ user_id 
+      description: Lấy conversation_id từ user_id để lấy lịch sử cuộc trò chuyện  
+      operationId: getConversation
+      requestBody:
+        description: id là id của user nhận lúc đăng nhập
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/initConversation'
+        required: true
+      responses:
+        '200':
+          description: Lấy conversation_id thành công
+          content:
+            application/json:
+              schema: 
+                properties:
+                  data: 
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        conversation_id:
+                          type: string
+                          example: 664e304950b332707fb0bbe0
+                        first_content:
+                          type: string
+                          example: Hãy cho tôi hình ảnh và công thức của món gà rán
         '404':
           description: id không tồn tại
         '500':
@@ -415,6 +452,8 @@ paths:
                 - type: "follow_up"
                   content: "What's the current weather forecast?"
                   content_type: "text"
+        '404':
+          description: ID không hợp lệ
         '500':
           description: Lỗi server
   /v1/api/conversation/getHistory:
@@ -611,6 +650,12 @@ components:
         id:
           type: string
           example: 663b48fc09800f0e9bb8e758
+    getConversation:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 663b48fc09800f0e9bb8e758
     newConversation:
       type: object
       properties:
@@ -627,7 +672,7 @@ components:
       properties:
         conversation_id:
           type: string
-          example: 664e304950b332707fb0bbe0
+          example: 663b48fc09800f0e9bb8e758
   securitySchemes:
     bearerAuth:          
       type: http
