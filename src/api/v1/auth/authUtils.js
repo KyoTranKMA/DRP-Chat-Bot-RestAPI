@@ -27,9 +27,7 @@ const createToken = async (payload) => {
 
 const verifyToken = (req, res, next) => {
     const authorization = req.headers['authorization']
-    console.log("request:", req);
     const token = authorization.split(' ')[1];
-    console.log("token:", token);
     if (!token) {
         return {
             code: 401,
@@ -53,8 +51,10 @@ const verifyToken = (req, res, next) => {
 }
 
 const verifyRefreshToken = async(req, res, next) => {
+    console.log("request:", req.headers);
     const authorization = await req.headers['authorization']
     const token = await authorization.split(' ')[1];
+    console.log("token:", token);
     const checkValid = await keytokenModel.findOne({ refreshToken: token });
 
     if (!token || !checkValid) {
