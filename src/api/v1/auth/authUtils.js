@@ -51,16 +51,20 @@ const verifyToken = (req, res, next) => {
 }
 
 const verifyRefreshToken = async(req, res, next) => {
-    console.log("request:", req.headers);
     const authorization = await req.headers['authorization']
     const token = await authorization.split(' ')[1];
-    console.log("token:", token);
     const checkValid = await keytokenModel.findOne({ refreshToken: token });
 
-    if (!token || !checkValid) {
+    if (!token) {
         return {
             code: 401,
             message: "Unauthorize user",
+        }
+    }
+    else if(!checkValid){
+        return {
+            code: 404,
+            message: "Refresh token not found in database",
         }
     }
     try {
