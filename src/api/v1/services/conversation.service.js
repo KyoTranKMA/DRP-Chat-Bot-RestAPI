@@ -46,7 +46,7 @@ class ConversationService {
             }
             const formattedConversations = conversations.map(conversation => ({
                 conversation_id: conversation.conversation_id,
-                first_content: conversation.chat_history[0]?.content
+                first_content: conversation.chat_history[0]?.content.split(' ').slice(0, 6).join(' ')
             }));
             console.log(formattedConversations)
             return {
@@ -148,7 +148,7 @@ class ConversationService {
             return { code: 500, message: "Internal server error" };
         }
     };
-    static streamingConersation = async ({ id, conversation_id, query }) => {
+    static streamingConversation = async ({ id, conversation_id, query }) => {
         try {
             if (!mongoose.Types.ObjectId.isValid(conversation_id || id)) {
                 console.error("Invalid ID");
@@ -185,7 +185,7 @@ class ConversationService {
                 bot_id: BOT_ID,
                 chat_history: chatHistory.chat_history
             };
-            
+
             const response = await fetch(COZE_API_URL, {
                 method: "POST",
                 headers: {
@@ -288,36 +288,36 @@ class ConversationService {
                 buffer = lines[lines.length - 1];
             });
         }
-    catch(error) {
-        console.error("Error in newConversation:", error);
-        return { code: 500, message: "Internal server error" };
-    }
-};
+        catch (error) {
+            console.error("Error in newConversation:", error);
+            return { code: 500, message: "Internal server error" };
+        }
+    };
     static getConversation = async ({ conversation_id }) => {
-    try {
-        if (!mongoose.Types.ObjectId.isValid(conversation_id)) {
-            console.error("Invalid Conversation ID");
-            return { code: 404 };
-        }
-        // Find the conversation by ID
-        const chatHistory = await HistoryConversationModel.findOne({
-            conversation_id: conversation_id
-        });
+        try {
+            if (!mongoose.Types.ObjectId.isValid(conversation_id)) {
+                console.error("Invalid Conversation ID");
+                return { code: 404 };
+            }
+            // Find the conversation by ID
+            const chatHistory = await HistoryConversationModel.findOne({
+                conversation_id: conversation_id
+            });
 
-        // Check conversation exists
-        if (!chatHistory) {
-            return { code: 404 };
-        }
+            // Check conversation exists
+            if (!chatHistory) {
+                return { code: 404 };
+            }
 
-        return {
-            code: 200,
-            messages: chatHistory.chat_history
-        };
-    } catch (error) {
-        console.error("Error in getConversation:", error);
-        return { code: 500, message: "Internal server error" };
-    }
-};
+            return {
+                code: 200,
+                messages: chatHistory.chat_history
+            };
+        } catch (error) {
+            console.error("Error in getConversation:", error);
+            return { code: 500, message: "Internal server error" };
+        }
+    };
 
 }
 module.exports = {

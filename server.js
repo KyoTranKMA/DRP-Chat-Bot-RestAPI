@@ -6,6 +6,6 @@ const PORT = process.env.PORT || 3055;
 
 
 const server = app.listen( PORT, () =>  {
-    console.log(`Server Running at: http://localhost:${PORT} `)
+    console.log(`Server Running at: ${PORT} `)
 })
 
