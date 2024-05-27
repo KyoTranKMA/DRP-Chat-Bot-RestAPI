@@ -112,7 +112,7 @@ class ConversationService {
 
             if (data.code === 0 && data.msg === "success") {
                 const messages = data.messages;
-                const assistantMessages = messages.filter(
+                let assistantMessages = messages.filter(
                     (message) =>
                         message.role === "assistant" &&
                         (message.type === "answer" || message.type === "follow_up")
@@ -148,36 +148,185 @@ class ConversationService {
             return { code: 500, message: "Internal server error" };
         }
     };
-    static getConversation = async ({ conversation_id }) => {
+    static streamingConersation = async ({ id, conversation_id, query }) => {
         try {
-            if (!mongoose.Types.ObjectId.isValid(conversation_id)) {
-                console.error("Invalid Conversation ID");
+            if (!mongoose.Types.ObjectId.isValid(conversation_id || id)) {
+                console.error("Invalid ID");
                 return { code: 404 };
             }
-            // Find the conversation by ID
-            const chatHistory = await HistoryConversationModel.findOne({
-                conversation_id: conversation_id
+            // Find the Conversation or create a new one and save user query
+            const chatHistory = await HistoryConversationModel.findOneAndUpdate(
+                { conversation_id },
+                {
+                    $push: {
+                        chat_history: {
+                            role: "user",
+                            content: query,
+                            content_type: "text"
+                        }
+                    },
+                    $set: {
+                        user: id
+                    }
+                },
+                {
+                    new: true,
+                    upsert: true
+                }
+            );
+
+            // Override request to Coze API
+            const queryString = query || "Xin chào";
+            const requestBody = {
+                query: queryString,
+                stream: true,
+                conversation_id: chatHistory.conversation_id,
+                user: chatHistory.user || "user_demo",
+                bot_id: BOT_ID,
+                chat_history: chatHistory.chat_history
+            };
+            
+            const response = await fetch(COZE_API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${COZE_API_KEY}`
+                },
+                body: JSON.stringify(requestBody)
             });
 
-            // Check conversation exists
-            if (!chatHistory) {
-                return { code: 404 };
-            }
+            res.setHeader("Content-Type", "text/event-stream");
+            const stream = response;
+            let buffer = "";
 
-            return {
-                code: 200,
-                messages: chatHistory.chat_history
-            };
-        } catch (error) {
-            console.error("Error in getConversation:", error);
-            return { code: 500, message: "Internal server error" };
+            stream.on("data", (chunk) => {
+                buffer += chunk.toString();
+                let lines = buffer.split("\n");
+
+                for (let i = 0; i < lines.length - 1; i++) {
+                    let line = lines[i].trim();
+
+                    if (!line.startsWith("data:")) continue;
+                    line = line.slice(5).trim();
+                    let chunkObj;
+                    try {
+                        if (line.startsWith("{")) {
+                            chunkObj = JSON.parse(line);
+                        } else {
+                            continue;
+                        }
+                    } catch (error) {
+                        console.error("Error parsing chunk:", error);
+                        continue;
+                    }
+                    if (chunkObj.event === "message") {
+                        if (
+                            chunkObj.message.role === "assistant" &&
+                            chunkObj.message.type === "answer"
+                        ) {
+                            let chunkContent = chunkObj.message.content;
+
+                            if (chunkContent !== "") {
+                                const chunkId = `chatcmpl-${Date.now()}`;
+                                const chunkCreated = Math.floor(Date.now() / 1000);
+                                res.write(
+                                    "data: " +
+                                    JSON.stringify({
+                                        id: chunkId,
+                                        object: "chat.completion.chunk",
+                                        created: chunkCreated,
+                                        model: data.model,
+                                        choices: [
+                                            {
+                                                index: 0,
+                                                delta: {
+                                                    content: chunkContent,
+                                                },
+                                                finish_reason: null,
+                                            },
+                                        ],
+                                    }) +
+                                    "\n\n"
+                                );
+                            }
+                        }
+                    } else if (chunkObj.event === "done") {
+                        const chunkId = `chatcmpl-${Date.now()}`;
+                        const chunkCreated = Math.floor(Date.now() / 1000);
+                        res.write(
+                            "data: " +
+                            JSON.stringify({
+                                id: chunkId,
+                                object: "chat.completion.chunk",
+                                created: chunkCreated,
+                                model: data.model,
+                                choices: [
+                                    {
+                                        index: 0,
+                                        delta: {},
+                                        finish_reason: "stop",
+                                    },
+                                ],
+                            }) +
+                            "\n\n"
+                        );
+                        res.write("data: [DONE]\n\n");
+                        res.end();
+                    } else if (chunkObj.event === "ping") {
+                    } else if (chunkObj.event === "error") {
+                        console.error(`Error: ${chunkObj.code}, ${chunkObj.message}`);
+                        res
+                            .status(500)
+                            .write(
+                                `data: ${JSON.stringify({ error: chunkObj.message })}\n\n`
+                            );
+                        res.write("data: [DONE]\n\n");
+                        res.end();
+                    }
+                }
+
+                buffer = lines[lines.length - 1];
+            });
         }
-    };
+    catch(error) {
+        console.error("Error in newConversation:", error);
+        return { code: 500, message: "Internal server error" };
+    }
+};
+    static getConversation = async ({ conversation_id }) => {
+    try {
+        if (!mongoose.Types.ObjectId.isValid(conversation_id)) {
+            console.error("Invalid Conversation ID");
+            return { code: 404 };
+        }
+        // Find the conversation by ID
+        const chatHistory = await HistoryConversationModel.findOne({
+            conversation_id: conversation_id
+        });
+
+        // Check conversation exists
+        if (!chatHistory) {
+            return { code: 404 };
+        }
+
+        return {
+            code: 200,
+            messages: chatHistory.chat_history
+        };
+    } catch (error) {
+        console.error("Error in getConversation:", error);
+        return { code: 500, message: "Internal server error" };
+    }
+};
 
 }
 module.exports = {
     ConversationService
 };
+
+
+
+
 
 
 

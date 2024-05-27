@@ -368,7 +368,7 @@ paths:
             application/json:
               schema: 
                 properties:
-                  conversations_id:
+                  conversation_id:
                     type: string
                     example: 664e304950b332707fb0bbe0
         '404':

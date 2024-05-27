@@ -23,6 +23,7 @@ class ConversationController {
     newConversation = async (req, res, next) => {
         try {
             const result = await ConversationService.newConversation(req.body);
+            res.set("Content-Type", "application/json");
             res.status(result.code).json(result);
         } catch (error) {
             next(error);

@@ -27,7 +27,9 @@ const createToken = async (payload) => {
 
 const verifyToken = (req, res, next) => {
     const authorization = req.headers['authorization']
+    console.log("request:", req);
     const token = authorization.split(' ')[1];
+    console.log("token:", token);
     if (!token) {
         return {
             code: 401,
