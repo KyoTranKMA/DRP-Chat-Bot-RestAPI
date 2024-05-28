@@ -11,7 +11,7 @@ class Database {
     // connect
     connect(type = 'mongodb') {
         // check dev env
-        if(1 === 2)
+        if(1 === 1)
         {
             mongoose.set('debug', true)
             mongoose.set('debug', {color: true}) 

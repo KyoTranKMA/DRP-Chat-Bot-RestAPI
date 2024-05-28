@@ -7,12 +7,13 @@ const router = express.Router()
 //new conversation 
 router.post('/conversation/init', ConversationController.initConversation)
 router.post('/conversation/newChat', ConversationController.newConversation)
+router.post('/conversation/streamingChat', ConversationController.streamingConversation)
 
 // get conversations ID of user
 router.post('/conversation/getConversations', ConversationController.getConversationsID)
 
 //history conversation 
-router.post('/conversation/getHistory', ConversationController.getConversation)
+router.post('/conversation/getHistory', ConversationController.getHistoryConversation)
 
 
 module.exports = router

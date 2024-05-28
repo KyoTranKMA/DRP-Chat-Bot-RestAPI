@@ -29,9 +29,16 @@ class ConversationController {
             next(error);
         }
     }
-    getConversation = async (req, res, next) => {
+    streamingConversation =  (req, res, next) => {
         try {
-            const result = await ConversationService.getConversation(req.body);
+            ConversationService.streamingConversation(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    }
+    getHistoryConversation = async (req, res, next) => {
+        try {
+            const result = await ConversationService.getHistory(req.body);
             res.status(result.code).json(result);
         } catch (error) {
             next(error);

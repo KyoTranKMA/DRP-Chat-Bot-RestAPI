@@ -4,10 +4,10 @@ info:
   description: Chi tiết về API để implment cho dự án
   version: 1.0.0
 servers:
+  -  url: https://drpteam.up.railway.app
   -  url: https://drpteam.zeabur.app
   -  url: https://drpteam.vercel.app
   -  url: https://drpteambackup.vercel.app
-  -  url: https://drpteam.up.railway.app
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/TranQuangDieu/API_Doc_Mobile_App/1.0.0
@@ -347,6 +347,16 @@ paths:
                   message:
                     type: string
                     example: Unauthorize user
+        '404':
+          description: "Refresh token không tồn tại trong db"
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Refresh token not found in database
   /v1/api/conversation/init:
     post:
       tags: 
@@ -387,11 +397,11 @@ paths:
         content:
           application/json:
             schema: 
-              $ref: '#/components/schemas/initConversation'
+              $ref: '#/components/schemas/getConversation'
         required: true
       responses:
         '200':
-          description: Lấy conversation_id thành công
+          description: 'Lấy conversation_id thành công, first_content trả về 6 từ của câu hỏi đầu tiên'
           content:
             application/json:
               schema: 
@@ -406,7 +416,7 @@ paths:
                           example: 664e304950b332707fb0bbe0
                         first_content:
                           type: string
-                          example: Hãy cho tôi hình ảnh và công thức của món gà rán
+                          example: Cho toi cong thuc nau ga
         '404':
           description: id không tồn tại
         '500':
@@ -416,7 +426,6 @@ paths:
       tags: 
       - conversations
       summary: Gửi câu hỏi và nhận câu trả lời trong cuộc trò chuyện
-      description:  "*Lưu ý: Vì hiện tại Vercel giới hạn thời chờ phản hồi là 10 giây nên đổi qua server của Zeabur <u>[Link Đây](https://drpteam.zeabur.app)</u> nếu muốn test API này. "
       operationId: conversationHistory
       requestBody:
         description: id là id của user nhận lúc đăng nhập
@@ -450,7 +459,7 @@ paths:
                   content: "Có thực phẩm nào giúp tăng cường sức đề kháng không?"
                   content_type: "text"
                 - type: "follow_up"
-                  content: "What's the current weather forecast?"
+                  content: "Bạn có thể giới thiệu một công thức nấu món gà nướng không?"
                   content_type: "text"
         '404':
           description: ID không hợp lệ
