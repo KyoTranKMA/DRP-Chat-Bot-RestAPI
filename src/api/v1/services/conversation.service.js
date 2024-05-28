@@ -46,7 +46,7 @@ class ConversationService {
             }
             const formattedConversations = conversations.map(conversation => ({
                 conversation_id: conversation.conversation_id,
-                first_content: conversation.chat_history[0]?.content.split(' ').slice(0, 6).join(' ')
+                first_content: conversation.chat_history[0]?.content.split(' ').slice(0, 6).join(' ') + "..."
             }));
             console.log(formattedConversations)
             return {
