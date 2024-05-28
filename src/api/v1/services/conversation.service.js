@@ -47,17 +47,17 @@ class ConversationService {
       const formattedConversations = conversations.map(conversation => {
         let first_content = conversation.chat_history[0]?.content.split(' ').slice(0, 6).join(' ');
         if (conversation.chat_history[0]?.content.split(' ').length > 6) {
-            first_content += "...";
+          first_content += "...";
         }
-    
-        let date = new Date(conversation.createdAt);
-        let formattedDate = `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+
+        let date = new Date(conversation.updatedAt);
+        let formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()} ${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
         return {
-            conversation_id: conversation.conversation_id,
-            first_content: first_content,
-            created_at: formattedDate
+          conversation_id: conversation.conversation_id,
+          first_content: first_content,
+          updated_at: formattedDate
         };
-    });
+      });
 
       return {
         code: 200,
@@ -69,6 +69,9 @@ class ConversationService {
     }
   };
   static newConversation = async ({ id, conversation_id, query }) => {
+    // Create transaction session
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
       console.log("New Conversation:", id, conversation_id, query);
       if (!mongoose.Types.ObjectId.isValid(conversation_id || id)) {
@@ -92,7 +95,8 @@ class ConversationService {
         },
         {
           new: true,
-          upsert: true
+          upsert: true,
+          session
         }
       );
 
@@ -141,19 +145,24 @@ class ConversationService {
             chatHistory._id,
             {
               $push: { chat_history: { $each: answerMessages } }
-            }
+            },
+            { session }
           );
         }
 
+        await session.commitTransaction();
+        session.endSession();
         return {
           code: 200,
           messages: assistantMessages
         };
       } else {
         console.error("Unexpected response from Coze API:", data);
+        await session.abortTransaction();
         return { code: 500, message: "Unexpected response from Coze API" };
       }
     } catch (error) {
+      await session.abortTransaction();
       console.error("Error in newConversation:", error);
       return { code: 500, message: "Internal server error" };
     }
