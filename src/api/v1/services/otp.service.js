@@ -15,6 +15,10 @@ class OtpService {
     // Send OTP
     static sendOTP = async ({ email }) => {
         try {
+            const existingEmail = await userModel.findOne({ email });
+            if (existingEmail) {
+                return { code: 400, message: "Email đã tồn tại" };
+            }
             // Generate OTP
             const otp = this.generateOTP();
             const newOTP = new Otps({ email, otp });
