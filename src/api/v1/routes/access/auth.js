@@ -17,9 +17,13 @@ router.get('/admin', AccessController.verifyAdmin, (req, res, next) => {
 
 //sign Up 
 router.post('/sign-up', AccessController.signUp)
-// Update In4
-router.post('/update/account',
+// Update Info of Account
+router.post('/account/updateInfo',
     UpdateController.updateAccount
+)
+// get Info of Accounts
+router.post('/account/getInfo',
+    UpdateController.getInfoAccount
 )
 // login 
 router.post('/login', AccessController.login)

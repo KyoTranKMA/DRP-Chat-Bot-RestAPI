@@ -101,7 +101,7 @@ paths:
                   message:
                     type: string
                     example: Tên tài khoản đã tồn tại
-  /v1/api/update/account:
+  /v1/api/account/update:
     post:
       tags:
         - users
@@ -127,6 +127,57 @@ paths:
                     type: string
                     example: Cập nhật tài khoản thành công
         '400':
+          description: "Cập nhật tài khoản không thành công, request body truyền vào không chính xác"
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Cập nhật tài khoản không thành công
+        '404':
+          description: "Tên tài khoản không tồn tại"
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Tên tài khoản không tồn tại
+  /v1/api/account/get:
+    post:
+      tags:
+        - users
+      summary: Thông tin profile
+      description: 'Lấy thông tin profile của người dùng'
+      operationId: getAccount
+      requestBody:
+        description: Thông tin để send request
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/getAccountBody'
+        required: true
+      responses:
+        '200':
+          description: "Lấy thông tin tài khoản thành công"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/getAccountSuccess'
+        '400':
+          description: "Lấy thông tin không thành công, thông tin người dùng đã bị xoá"
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Lấy thông tin tài khoản không thành công
+        '404':
           description: "Tên tài khoản không tồn tại"
           content:
             application/json:
@@ -140,8 +191,8 @@ paths:
     post:
       tags:
         - users
-      summary: Gửi mã OTP
-      description: Gửi mã OTP cho user để xác thực email có tồn tại hay không
+      summary: Gửi mã OTP để đăng ký tài khoản
+      description: Gửi mã OTP cho user để xác thực email có tồn tại hay không cho việc đăng ký tài khoản
       operationId: sendOTP
       requestBody:
         description: Thông tin để gửi mã OTP
@@ -181,51 +232,6 @@ paths:
                   message:
                     type: string
                     example: Gửi mã OTP không thành công
-  /v1/api/verifyOTP:
-    post:
-      tags:
-        - users
-      summary: Xác nhận mã OTP
-      description: Xác nhận mã OTP đã gửi qua email
-      operationId: verifyOTP
-      requestBody:
-        description: Thông tin để xác nhận mã OTP
-        content:
-          application/json:
-            schema: 
-              $ref: '#/components/schemas/verifyOTP'
-        required: true
-      responses:
-        '200':
-          description: Xác nhận mã OTP thành công
-          content:
-            application/json:
-              schema: 
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Xác nhận mã OTP thành công
-        '400':
-          description: Mã OTP không chính xác
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Mã OTP không chính xác
-        '500':
-          description: Lỗi sever xác nhận mã OTP không thành công
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Lỗi hệ thống
   /v1/api/reset/getOTP:
     post:
       tags:
@@ -292,6 +298,51 @@ paths:
           description: Email không tồn tại
         '500':
           description: Lỗi server đổi mật khẩu không thành công
+  /v1/api/verifyOTP:
+    post:
+      tags:
+        - users
+      summary: Xác nhận mã OTP
+      description: Xác nhận mã OTP đã gửi qua email
+      operationId: verifyOTP
+      requestBody:
+        description: Thông tin để xác nhận mã OTP
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/verifyOTP'
+        required: true
+      responses:
+        '200':
+          description: Xác nhận mã OTP thành công
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Xác nhận mã OTP thành công
+        '400':
+          description: Mã OTP không chính xác
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Mã OTP không chính xác
+        '500':
+          description: Lỗi sever xác nhận mã OTP không thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Lỗi hệ thống
   /v1/api/authenticate:
     get:
       tags:
@@ -621,18 +672,21 @@ components:
         name:
           type: string
           example: Trần Quang Diệu
-        age: 
-          type: number
-          example: 18
+        dateOfBirth:
+          type: string
+          example: 07-06-2004
         height:
           type: number
           example: 171.5
-        dateOfBirth:
-          type: string
-          example: 2004-12-01
         weight:
           type: number
           example: 70.5
+    getAccountBody:
+      type: object
+      properties:
+        username:
+          type: string
+          example: kyo
     verifyOTP:
       type: "object"
       properties:
@@ -642,6 +696,33 @@ components:
         otp:
           type: "string"
           example: "123456"
+    getAccountSuccess:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Lấy thông tin tài khoản thành công
+        info:
+          type: object  
+          properties:
+            name:
+              type: string
+              example: Trần Quang Diệu
+            dateOfBirth:
+              type: string
+              example: 07-06-2004
+            age: 
+              type: number
+              example: "20"
+            height:
+              type: number
+              example: "171.5"
+            weight:
+              type: number
+              example: "70.5"
+            bmi: 
+              type: number
+              example: "21.2"
     refreshToken: 
       type: object
       properties:

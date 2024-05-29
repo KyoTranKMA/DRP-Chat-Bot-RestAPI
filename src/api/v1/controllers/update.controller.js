@@ -11,9 +11,14 @@ class UpdateController {
             next(error);
         }
     }
-   
-
-
+    getInfoAccount = async (req, res, next) => {
+        try {
+            const getResult = await UpdateService.getInfoAccount(req.body);
+            res.status(getResult.code).json(getResult);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 module.exports = new UpdateController();
