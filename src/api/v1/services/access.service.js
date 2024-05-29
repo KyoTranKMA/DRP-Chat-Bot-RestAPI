@@ -153,15 +153,11 @@ class AccessService {
         }
     }
 
-    static resetPassword = async ({email, otp, password}) => {
+    static resetPassword = async ({email, password}) => {
         try {
             const user = await userModel.findOne({ email});
             if (!user) {
                 return { code: 404};
-            }
-            const verifyOTP = await OtpService.verifyOTP({email, otp});
-            if (verifyOTP.code !== 200) {
-                return { code: 400};
             }
             const hashPassword = await bcrypt.hash(password, 10);
             await userModel.findOneAndUpdate({ email: email }, { password: hashPassword });

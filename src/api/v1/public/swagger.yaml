@@ -161,6 +161,16 @@ paths:
                   message:
                     type: string
                     example: Gửi mã OTP thành công
+        '400':
+          description: Email đã tồn tại
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email đã tồn tại
         '500':
           description: Lỗi server gửi mã OTP không thành công
           content:
@@ -241,6 +251,16 @@ paths:
                   message:
                     type: string
                     example: Đã gửi mã OTP thành công
+        '404':
+          description: Email không tồn tại trong hệ thống
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email không tồn tại
         '500':
           description: Lỗi server gửi mã OTP không thành công
           content:
@@ -268,8 +288,6 @@ paths:
       responses:
         '200':
           description: Đổi mật khẩu thành công
-        '400':
-          description: Mã OTP không chính xác
         '404':
           description: Email không tồn tại
         '500':
@@ -401,7 +419,7 @@ paths:
         required: true
       responses:
         '200':
-          description: 'Lấy conversation_id thành công, first_content trả về 6 từ của câu hỏi đầu tiên'
+          description: "Lấy conversation_id thành công, first_content trả về 6 từ của câu hỏi đầu tiên"
           content:
             application/json:
               schema: 
@@ -417,6 +435,10 @@ paths:
                         first_content:
                           type: string
                           example: Cho toi cong thuc nau ga
+                        updated_at:
+                          type: string
+                          example:
+                            29-5-2024 0:57
         '404':
           description: id không tồn tại
         '500':
@@ -587,9 +609,6 @@ components:
         email:
           type: "string"
           example: "Kyo@example.com"
-        otp: 
-          type: "string"
-          example: "123456"
         password:
           type: "string"
           example: "Dieudeptrai"

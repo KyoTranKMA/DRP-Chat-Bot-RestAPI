@@ -29,13 +29,13 @@ router.post('/logout', AccessController.logout)
 router.get('/authenticate', AccessController.authenToken)
 // refresh token
 router.get('/refreshToken', AccessController.requestRefreshToken)
-// send otp
-router.post('/sendOTP', OtpController.sendOTP);
-router.post('/verifyOTP', OtpController.verifyOTP);
+// send otp for sign-up
+router.post('/sendOTP', OtpController.sendOTPSignUp);
 // reset password
 router.post('/reset/password', AccessController.resetPassword);
 // get otp for reset password
-router.post('/reset/getOTP', OtpController.sendOTP)
-
+router.post('/reset/getOTP', OtpController.sendOTPForgotPassword)
+// verify OTPs
+router.post('/verifyOTP', OtpController.verifyOTP);
 
 module.exports = router

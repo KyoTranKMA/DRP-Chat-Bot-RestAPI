@@ -3,9 +3,17 @@
 const { OtpService } = require('../services/otp.service');
 
 class OtpController {
-    sendOTP = async (req, res, next) => {
+    sendOTPSignUp = async (req, res, next) => {
         try {
-            const sendOTPResult = await OtpService.sendOTP(req.body);
+            const sendOTPResult = await OtpService.sendOTPSignUp(req.body);
+            res.status(sendOTPResult.code).json(sendOTPResult);
+        } catch (error) {
+            next(error);
+        }
+    }
+    sendOTPForgotPassword = async (req, res, next) => {
+        try {
+            const sendOTPResult = await OtpService.sendOTPForgotPassword(req.body);
             res.status(sendOTPResult.code).json(sendOTPResult);
         } catch (error) {
             next(error);
