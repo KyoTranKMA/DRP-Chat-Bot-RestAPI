@@ -663,6 +663,86 @@ paths:
                   message:
                     type: string
                     example: Lỗi server
+  /v1/api/recipes/vn/paging:
+    get:
+      tags:
+        - recipes
+      summary: Lấy công thức món ăn Việt Nam theo trang
+      description: Lấy danh sách công thức món ăn Việt Nam từ database để đưa vào knowledge base của chat bot theo từng trang
+      operationId: getRecipesPaging
+      parameters:
+        - name: page
+          in: query
+          description: Số trang cần lấy, mặc định là 1
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Số lượng công thức món ăn cần lấy, mặc định là 50
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: Lấy danh sách công thức thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "Cơm Gà Xối Mỡ Sốt Mắm Tỏi"
+                  category:
+                    type: string
+                    example: "Món chính"
+                  ingredients:
+                    type: array
+                    items:
+                      type: object
+                    properties:
+                      name:
+                        type: string
+                      amount:
+                        type: string
+                    example:
+                      - name: "Đùi gà góc tư"
+                        amount: "2 cái"
+                      - name: "Gạo trắng"
+                        amount: "300gr"
+                      - name: "Hoa hồi"
+                        amount: "3gr"
+                      - name: "Quế cây"
+                        amount: "3gr"
+                      - name: "Đinh hương"
+                        amount: "2gr"
+                  instructions:
+                    type: array
+                    items:
+                      type: object
+                    properties:
+                      step:
+                        type: string
+                      content:
+                        type: string
+                    example: 
+                      - step: "1"
+                        content: "Rang thơm hoa hồi, quế khoảng 1 phút rồi cho đinh hương vào rang nhanh 10 giây. Cho các nguyên liệu vừa rang vào nồi nấu cùng 1 lít nước và vài củ hành tím cắt đôi, nêm 10gr hạt nêm, 2gr muối, đợi nước vừa sôi cho đùi gà vào luộc chín khoảng 15 đến 20 phút tùy độ lớn của đùi gà (để gà mềm không bỏ gà vào khi đang đông lạnh, để lửa nhỏ không để lửa quá lớn sẽ bị rách da gà) đem đùi gà ra để ráo, dùng kim nhỏ xăm nhẹ phần da cho đùi gà không bị đọng nước khi xối mỡ sẽ mau giòn và không bị bắn dầu."
+                      - step: "2"
+                        content: "Vo sạch 300gr gạo cho vào nồi, đong 300ml nước luộc gà vào nồi ( canh lượng nước vừa đủ nấu cơm tùy theo loại gạo) bấm nút và nấu chín. Sau khi cơm chín để cơm nguội đem cơm trộn với 2 lòng đỏ trứng gà và 1 muỗng canh tương ớt bóp tơi ra. cho 1 ít dầu tỏi vào chảo xào phần cơm cho hạt cơm rời ra dọn cơm ra đĩa. ( phần nước luộc gà còn dư bạn có thể nêm nếm lại vừa ăn thêm rong biển, thịt bằm, tiêu và hành ngò sẽ có một món canh rất thơm ngon và đậm đà)."
+        '500':
+          description: Lỗi server
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Lỗi server
 components:
   schemas:
     loginBody:

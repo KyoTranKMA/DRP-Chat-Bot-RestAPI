@@ -11,6 +11,13 @@ class RecipeController {
             next(error);
         }
     }
+    getRecipesPaging = (req, res , next) => {
+        try {
+            RecipeService.getRecipesPaging(req, res);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 module.exports = new RecipeController();
