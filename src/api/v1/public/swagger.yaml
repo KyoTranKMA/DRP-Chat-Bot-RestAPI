@@ -16,6 +16,8 @@ tags:
     description: Các api liên quan tới user
   - name: conversations
     description: Các api liên quan tới cuộc trò chuyện
+  - name: recipes
+    description: API công thức để đưa vào knowledge base của chat bot
 paths:
   /v1/api/login: 
     post:
@@ -101,7 +103,7 @@ paths:
                   message:
                     type: string
                     example: Tên tài khoản đã tồn tại
-  /v1/api/account/update:
+  /v1/api/account/updateInfo:
     post:
       tags:
         - users
@@ -146,7 +148,7 @@ paths:
                   message:
                     type: string
                     example: Tên tài khoản không tồn tại
-  /v1/api/account/get:
+  /v1/api/account/getInfo:
     post:
       tags:
         - users
@@ -596,6 +598,71 @@ paths:
           description: Conversation id không tồn tại       
         '500':
           description: Lỗi server
+  /v1/api/recipes/vn:
+    get:
+      tags:
+        - recipes
+      summary: Lấy tất cả công thức món ăn Việt Nam
+      description: Lấy danh sách công thức món ăn Việt Nam từ database để đưa vào knowledge base của chat bot
+      operationId: getRecipes
+      responses:
+        '200':
+          description: Lấy danh sách công thức thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "Cơm Gà Xối Mỡ Sốt Mắm Tỏi"
+                  category:
+                    type: string
+                    example: "Món chính"
+                  ingredients:
+                    type: array
+                    items:
+                      type: object
+                    properties:
+                      name:
+                        type: string
+                      amount:
+                        type: string
+                    example:
+                      - name: "Đùi gà góc tư"
+                        amount: "2 cái"
+                      - name: "Gạo trắng"
+                        amount: "300gr"
+                      - name: "Hoa hồi"
+                        amount: "3gr"
+                      - name: "Quế cây"
+                        amount: "3gr"
+                      - name: "Đinh hương"
+                        amount: "2gr"
+                  instructions:
+                    type: array
+                    items:
+                      type: object
+                    properties:
+                      step:
+                        type: string
+                      content:
+                        type: string
+                    example: 
+                      - step: "1"
+                        content: "Rang thơm hoa hồi, quế khoảng 1 phút rồi cho đinh hương vào rang nhanh 10 giây. Cho các nguyên liệu vừa rang vào nồi nấu cùng 1 lít nước và vài củ hành tím cắt đôi, nêm 10gr hạt nêm, 2gr muối, đợi nước vừa sôi cho đùi gà vào luộc chín khoảng 15 đến 20 phút tùy độ lớn của đùi gà (để gà mềm không bỏ gà vào khi đang đông lạnh, để lửa nhỏ không để lửa quá lớn sẽ bị rách da gà) đem đùi gà ra để ráo, dùng kim nhỏ xăm nhẹ phần da cho đùi gà không bị đọng nước khi xối mỡ sẽ mau giòn và không bị bắn dầu."
+                      - step: "2"
+                        content: "Vo sạch 300gr gạo cho vào nồi, đong 300ml nước luộc gà vào nồi ( canh lượng nước vừa đủ nấu cơm tùy theo loại gạo) bấm nút và nấu chín. Sau khi cơm chín để cơm nguội đem cơm trộn với 2 lòng đỏ trứng gà và 1 muỗng canh tương ớt bóp tơi ra. cho 1 ít dầu tỏi vào chảo xào phần cơm cho hạt cơm rời ra dọn cơm ra đĩa. ( phần nước luộc gà còn dư bạn có thể nêm nếm lại vừa ăn thêm rong biển, thịt bằm, tiêu và hành ngò sẽ có một món canh rất thơm ngon và đậm đà)."
+        '500':
+          description: Lỗi server
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Lỗi server
 components:
   schemas:
     loginBody:
@@ -713,16 +780,16 @@ components:
               example: 07-06-2004
             age: 
               type: number
-              example: "20"
+              example: 20
             height:
               type: number
-              example: "171.5"
+              example: 171.5
             weight:
               type: number
-              example: "70.5"
+              example: 70.5
             bmi: 
               type: number
-              example: "21.2"
+              example: 21.2
     refreshToken: 
       type: object
       properties:

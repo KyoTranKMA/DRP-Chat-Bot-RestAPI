@@ -39,7 +39,7 @@ class ConversationService {
         console.error("Invalid User ID");
         return { code: 404 };
       }
-      const conversations = await HistoryConversationModel.find({ user: userID });
+      const conversations = await HistoryConversationModel.find({ user: userID }).sort({ updatedAt: -1 }); 
 
       if (conversations.length === 0) {
         return { code: 404 };

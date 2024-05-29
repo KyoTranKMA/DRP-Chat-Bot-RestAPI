@@ -83,8 +83,7 @@ class OtpService {
                     code: 400,
                 };
             }
-            // Update user verify status
-            await userModel.findOneAndUpdate({ email }, { verify: true });
+
             
             await Otps.deleteOne({ email, otp });
             return {
