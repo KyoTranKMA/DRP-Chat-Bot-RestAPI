@@ -47,9 +47,7 @@ class UpdateService {
             if (!existingUsername) {
                 return { code: 404, message: "Tên tài khoản không tồn tại" };
             }
-            // Convert dd-mm-yyyy to yyyy-mm-dd format    
-            const formattedDob = dateOfBirth.split("-").reverse().join("-");
-            const age = new Date().getFullYear() - new Date(formattedDob).getFullYear();
+            const age = new Date().getFullYear() - new Date(dateOfBirth).getFullYear();
             // Convert height to meter and calculate BMI
             const heightInM = height / 100;
             const bmi = (weight / (heightInM * heightInM)).toFixed(2);
@@ -60,7 +58,7 @@ class UpdateService {
                         'name': name,
                         'age': age,
                         'height': height,
-                        'dateOfBirth': formattedDob,
+                        'dateOfBirth': dateOfBirth,
                         'weight': weight,
                         'bmi': bmi
                     }
