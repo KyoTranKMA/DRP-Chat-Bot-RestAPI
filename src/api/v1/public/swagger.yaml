@@ -485,7 +485,7 @@ paths:
                         conversation_id:
                           type: string
                           example: 664e304950b332707fb0bbe0
-                        first_content:
+                        title:
                           type: string
                           example: Cho toi cong thuc nau ga
                         updated_at:
@@ -538,6 +538,35 @@ paths:
                   content_type: "text"
         '404':
           description: ID không hợp lệ
+        '500':
+          description: Lỗi server
+          
+  /v1/api/conversation/updateTitle:
+    post:
+      tags: 
+      - conversations
+      summary: Cập nhật tiêu đề
+      description: Cập nhật tiêu đề của cuộc trò chuyện từ phía user
+      operationId: updateTitleConversation
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/updateTitleConversation'
+        required: true
+      responses:
+        '200':
+          description: Update title thành công
+          content:
+            application/json:
+              schema: 
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      example: Công thức gà rán
+        '404':
+          description: Conversation id không tồn tại       
         '500':
           description: Lỗi server
   /v1/api/conversation/getHistory:
@@ -680,7 +709,7 @@ paths:
             example: 1
         - name: limit
           in: query
-          description: Số lượng công thức món ăn cần lấy, mặc định là 50
+          description: Số lượng công thức món ăn cần lấy, mặc định là 20
           required: false
           schema:
             type: integer
@@ -924,6 +953,14 @@ components:
         query:
           type: string
           example: Xin chào tôi cần tư vấn
+    updateTitleConversation:
+      properties:
+        conversation_id:
+          type: string
+          example: 6659a11b8b82951bb6cf7b22
+        title:
+          type: string
+          example: Công thức gà rán
     getHistoryConversation:
       properties:
         conversation_id:

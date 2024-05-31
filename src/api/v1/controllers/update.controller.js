@@ -13,6 +13,7 @@ class UpdateController {
     }
     getInfoAccount = async (req, res, next) => {
         try {
+            console.log("request body", req.body);
             const getResult = await UpdateService.getInfoAccount(req.body);
             res.status(getResult.code).json(getResult);
         } catch (error) {
