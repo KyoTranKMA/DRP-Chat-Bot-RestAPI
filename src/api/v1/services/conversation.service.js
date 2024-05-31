@@ -39,22 +39,18 @@ class ConversationService {
         console.error("Invalid User ID");
         return { code: 404 };
       }
-      const conversations = await HistoryConversationModel.find({ user: userID }).sort({ updatedAt: -1 }); 
+      const conversations = await HistoryConversationModel.find({ user: userID }).sort({ updatedAt: -1 });
 
       if (conversations.length === 0) {
         return { code: 404 };
       }
       const formattedConversations = conversations.map(conversation => {
-        let first_content = conversation.chat_history[0]?.content.split(' ').slice(0, 6).join(' ');
-        if (conversation.chat_history[0]?.content.split(' ').length > 6) {
-          first_content += "...";
-        }
 
         let date = new Date(conversation.updatedAt);
         let formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()} ${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
         return {
           conversation_id: conversation.conversation_id,
-          first_content: first_content,
+          title: conversation.title,
           updated_at: formattedDate
         };
       });
@@ -73,33 +69,54 @@ class ConversationService {
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
-      console.log("New Conversation:", id, conversation_id, query);
       if (!mongoose.Types.ObjectId.isValid(conversation_id || id)) {
         console.error("Invalid ID");
         return { code: 404 };
       }
       // Find the Conversation or create a new one and save user query
-      const chatHistory = await HistoryConversationModel.findOneAndUpdate(
-        { conversation_id },
-        {
-          $push: {
-            chat_history: {
+      let chatHistory = await HistoryConversationModel.findOne({ conversation_id: conversation_id });
+  
+      if (!chatHistory) {
+        let first_content = query.split(' ').slice(0, 6).join(' ');
+        if (query.split(' ').length > 6) {
+          first_content += "...";
+        }
+        chatHistory = await HistoryConversationModel.findOneAndUpdate(
+          { conversation_id: conversation_id },
+          {
+            title: first_content,
+            chat_history: [{
               role: "user",
               content: query,
               content_type: "text"
+            }],
+            user: id
+          },
+          {
+            new: true,
+            upsert: true,
+            session
+          }
+        );
+      }
+      else {
+        chatHistory = await HistoryConversationModel.findOneAndUpdate(
+          { conversation_id },
+          {
+            $push: {
+              chat_history: {
+                role: "user",
+                content: query,
+                content_type: "text"
+              }
             }
           },
-          $set: {
-            user: id
+          {
+            new: true,
+            session
           }
-        },
-        {
-          new: true,
-          upsert: true,
-          session
-        }
-      );
-
+        );
+      }
       // Override request to Coze API
       const queryString = query || "Xin chào";
       const requestBody = {
@@ -110,9 +127,9 @@ class ConversationService {
         bot_id: BOT_ID,
         chat_history: chatHistory.chat_history
       };
-
+  
       console.log("Request Body:", requestBody);
-
+  
       const response = await fetch(COZE_API_URL, {
         method: "POST",
         headers: {
@@ -121,9 +138,9 @@ class ConversationService {
         },
         body: JSON.stringify(requestBody)
       });
-
+  
       const data = await response.json();
-
+  
       if (data.code === 0 && data.msg === "success") {
         const messages = data.messages;
         let assistantMessages = messages.filter(
@@ -136,10 +153,10 @@ class ConversationService {
           content: message.content.trim(),
           content_type: message.content_type
         }));
-
+  
         // Save answer to chat history
         const answerMessages = assistantMessages.filter(message => message.type === "answer");
-
+  
         if (answerMessages.length > 0) {
           await HistoryConversationModel.findByIdAndUpdate(
             chatHistory._id,
@@ -149,7 +166,7 @@ class ConversationService {
             { session }
           );
         }
-
+  
         await session.commitTransaction();
         session.endSession();
         return {
@@ -169,8 +186,6 @@ class ConversationService {
   };
   static streamingConversation = async (req, res, next) => {
     try {
-
-
       const { id, conversation_id, query } = req.body;
       const queryString = query;
       const stream = true;
@@ -344,6 +359,29 @@ class ConversationService {
       console.error("Error:", error);
     }
   };
+  static updateTitle = async ({ conversation_id, title }) => {
+    try {
+      if (!mongoose.Types.ObjectId.isValid(conversation_id)) {
+        console.error("Invalid ID");
+        return { code: 404 };
+      }
+      const chatHistory = await HistoryConversationModel.findOneAndUpdate(
+        { conversation_id: conversation_id },
+        { title: title },
+        { new: true }
+      );
+      if (!chatHistory) {
+        return { code: 404 };
+      }
+      return {
+        code: 200,
+        title: chatHistory.title
+      };
+    } catch (error) {
+      console.error("Error in updateTitle:", error);
+      return { code: 500, message: "Internal server error" };
+    }
+  }
   // get History of Conversation by Conversation ID
   static getHistory = async ({ conversation_id }) => {
     try {

@@ -11,7 +11,8 @@ router.post('/conversation/streamingChat', ConversationController.streamingConve
 
 // get conversations ID of user
 router.post('/conversation/getConversations', ConversationController.getConversationsID)
-
+// update title conversation
+router.post('/conversation/updateTitle', ConversationController.updateTitleConversation)
 //history conversation 
 router.post('/conversation/getHistory', ConversationController.getHistoryConversation)
 

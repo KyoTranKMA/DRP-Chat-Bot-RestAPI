@@ -25,7 +25,7 @@ class RecipeService {
     static getRecipesPaging = async (req, res) => {
         try {
             const page = req.query.page || 1;
-            const limit = req.query.limit || 50;           
+            const limit = req.query.limit || 20;           
             const offset = (page - 1) * limit;
             const recipes = await recipeModel.find().skip(offset).limit(limit);
             if (!recipes) {

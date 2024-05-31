@@ -37,27 +37,33 @@ const historyConversationSchema = new mongoose.Schema(
             unique: true,
             required: true,
             ref: "Conversation",
+            index: true
+        },
+        title:
+        {
+            type: String,
+            required: true,
         },
         chat_history: [
             {
                 _id: false,
-                role: { 
-                    type: String, 
-                    enum: ["user", "assistant"], 
-                    required: true 
+                role: {
+                    type: String,
+                    enum: ["user", "assistant"],
+                    required: true
                 },
-                type: { 
-                    type: String, 
+                type: {
+                    type: String,
                     enum: ["question", "answer"]
                 },
-                content: { 
-                    type: String, 
-                    required: true 
+                content: {
+                    type: String,
+                    required: true
                 },
-                content_type: { 
-                    type: String, 
-                    enum: ["text", "image", "video"], 
-                    default: "text" 
+                content_type: {
+                    type: String,
+                    enum: ["text", "image", "video"],
+                    default: "text"
                 }
             }
         ],

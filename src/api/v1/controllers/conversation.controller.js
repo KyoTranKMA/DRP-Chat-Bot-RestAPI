@@ -36,6 +36,14 @@ class ConversationController {
             next(error);
         }
     }
+    updateTitleConversation = async (req, res, next) => {  
+        try {
+            const result = await ConversationService.updateTitle(req.body);
+            res.status(result.code).json(result);
+        } catch (error) {
+            next(error);
+        }
+    }
     getHistoryConversation = async (req, res, next) => {
         try {
             const result = await ConversationService.getHistory(req.body);
