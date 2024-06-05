@@ -5,7 +5,7 @@ const sendEmail = require('../auth/sendEmailUtils.js');
 const userModel = require("../models/user.model.js");
 
 class OtpService {
-    // Generate OTP
+    // Generate OTPs
     static generateOTP = () => {
         return randomstring.generate({
             length: 6,
