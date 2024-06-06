@@ -13,7 +13,7 @@ class RecipeService {
                 res.status(404).json(message);
             }
             res.status(200).json(getArrayInfoData({
-                fields: ['Name', 'Ingredients', 'Instructions'],
+                fields: ['Name', 'Ingredients', 'Instructions', 'Image'],
                 object: recipes
             }));
         }
@@ -33,7 +33,7 @@ class RecipeService {
                 res.status(404).json(message);
             }
             res.status(200).json(getArrayInfoData({
-                fields: ['Name', 'Ingredients', 'Instructions'],
+                fields: ['Name', 'Ingredients', 'Instructions', 'Image'],
                 object: recipes
             }));
         }
@@ -42,6 +42,7 @@ class RecipeService {
             res.status(500).json(error);
         }
     }
+    
 
 }
 

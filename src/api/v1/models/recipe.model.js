@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 // Table
-const COLLECTION_NAME = 'recipes'
+const COLLECTION_NAME = 'recipes_img'
 // Row
 const DOCUMENT_NAME = 'recipe';
 
@@ -22,7 +22,10 @@ var recipeSchema = new mongoose.Schema({
     Instructions: {
         type: Array,
         required: true
-    }
+    },
+    Image: {
+        type: String
+    },
 },
 {
     collection: COLLECTION_NAME
