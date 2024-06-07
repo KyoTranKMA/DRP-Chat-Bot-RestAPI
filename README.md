@@ -59,9 +59,9 @@ npm start
 ```
 
 ## Usage
-1. API Document 
+1. API Document
+- [![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)](https://app.swaggerhub.com/apis/TranQuangDieu/API_Doc_Mobile_App/1.0.0#)
 
-[![Swagger UI](https://raw.githubusercontent.com/swagger-api/swagger.io/wordpress/images/assets/SW-logo-clr.png")]([https://drpteam.zeabur.app](https://app.swaggerhub.com/apis/TranQuangDieu/API_Doc_Mobile_App/1.0.0#))
 
 ## Roadmap
 **Coming Soon**
