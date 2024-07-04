@@ -3,6 +3,5 @@ UnitTest
 .DS_Store
 .vercel
 .env
-.env
 src/api/rest
 

@@ -31,7 +31,7 @@ class ConversationController {
     }
     streamingConversation =  (req, res, next) => {
         try {
-            ConversationService.streamingConversation(req, res, next);
+            ConversationService.streamingConversation(req, res, req.body);
         } catch (error) {
             next(error);
         }
