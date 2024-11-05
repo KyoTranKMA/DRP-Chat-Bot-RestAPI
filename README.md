@@ -11,17 +11,16 @@
 - Update Profile
 
 ## Deployment
-### Railway
-[![Deploy on Railway](https://railway.app/button.svg)](https://drpteam.up.railway.app)
-
-
 ### Zeabur
-[![Deploy on Zeabur](https://zeabur.com/button.svg)](https://drpteam.zeabur.app)
+[![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/BZ515Z?referralCode=fatwang2)
 
 ### Vercel
-[![Deploy with Vercel](https://vercel.com/button)](https://drpteam.vercel.app)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/fatwang2/coze2openai&env=BOT_ID&envDescription=COZE_BOT_ID)
 
-**Note:** Vercel's serverless functions have a 10-second timeout limit and it not avaiable for chatting with non-streaming services.
+**Note:** Vercel's serverless functions have a 10-second timeout limit.
+
+### Railway
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/yM5tQL?referralCode=mDim7U)
 
 
 ### Local Deployment
