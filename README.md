@@ -12,15 +12,7 @@
 
 ## Deployment
 ### Zeabur
-[![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/BZ515Z?referralCode=fatwang2)
-
-### Vercel
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/fatwang2/coze2openai&env=BOT_ID&envDescription=COZE_BOT_ID)
-
-**Note:** Vercel's serverless functions have a 10-second timeout limit.
-
-### Railway
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/yM5tQL?referralCode=mDim7U)
+[![Deploy on Zeabur](https://zeabur.com/button.svg)](https://drpteam.zeabur.app)
 
 
 ### Local Deployment
@@ -62,16 +54,8 @@ npm start
 - [![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)](https://app.swaggerhub.com/apis/TranQuangDieu/API_Doc_Mobile_App/1.0.0#)
 
 
-## Roadmap
-**Coming Soon**
-*   Streaming Chat
-*   Image support
-*   Audio-to-text
-*   Text-to-audio
-*   Docker support
-
 **Available Now**
 *   Continuous dialogue with the history of chat
-*   Zeabur & Vercel & Railway deployment
+*   Zeabur deployment
 ## Overview Project
 <img width="841" alt="Database Server" src="https://github.com/KyoTranKMA/DRP-Chat-Bot-RestAPI/assets/125230579/79d68904-3324-43e4-b77c-7ae5492d9f38">
