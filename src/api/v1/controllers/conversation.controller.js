@@ -29,13 +29,6 @@ class ConversationController {
             next(error);
         }
     }
-    streamingConversation =  (req, res, next) => {
-        try {
-            ConversationService.streamingConversation(req, res, req.body);
-        } catch (error) {
-            next(error);
-        }
-    }
     updateTitleConversation = async (req, res, next) => {  
         try {
             const result = await ConversationService.updateTitle(req.body);

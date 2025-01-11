@@ -83,7 +83,6 @@ class OtpService {
                     code: 400,
                 };
             }
-
             
             await Otps.deleteOne({ email, otp });
             return {
