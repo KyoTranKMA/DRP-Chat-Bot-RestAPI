@@ -54,17 +54,14 @@ class AccessService {
         try {
             // Find the user in the database
             const user = await userModel.findOne({ username: username });
-            if (!user) {
-                return { code: 404, message: "Vui lòng nhập lại tên tài khoản" };
-            }
 
             const verifyPassword = await bcrypt.compare(
                 password,
                 user.password
             )
-            // Check password
-            if (!verifyPassword) {
-                return { code: 404, message: "Vui lòng nhập lại mật khẩu" };
+            // Check user account
+            if (!user || !verifyPassword) {
+                return { code: 404, message: "Vui lòng điền lại thông tin tài khoản" };
             }
 
             // Create Access token for user
