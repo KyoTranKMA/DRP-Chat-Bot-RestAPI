@@ -2,7 +2,7 @@
 const Otps = require('../models/otp.model.js');
 const randomstring = require('randomstring');
 const sendEmail = require('../auth/sendEmailUtils.js');
-const userModel = require("../models/user.model.js");
+const userModel = require("../models/user.model.js")
 
 class OtpService {
     // Generate OTPs

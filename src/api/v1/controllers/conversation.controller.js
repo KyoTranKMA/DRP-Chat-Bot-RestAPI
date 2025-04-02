@@ -29,7 +29,18 @@ class ConversationController {
             next(error);
         }
     }
-    updateTitleConversation = async (req, res, next) => {  
+    streamingConversation = async (req, res, next) => {
+        try {
+            await ConversationService.streamConversation(req, res);
+        } catch (error) {
+            console.error("Error in streamingConversation controller:", error);
+            if (!res.headersSent) {
+                res.status(500).json({ error: "Internal server error" });
+            }
+            next(error);
+        }
+    }
+    updateTitleConversation = async (req, res, next) => {
         try {
             const result = await ConversationService.updateTitle(req.body);
             res.status(result.code).json(result);

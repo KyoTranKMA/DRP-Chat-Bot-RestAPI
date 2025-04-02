@@ -7,6 +7,7 @@ const router = express.Router()
 //new conversation 
 router.post('/conversation/init', ConversationController.initConversation)
 router.post('/conversation/newChat', ConversationController.newConversation)
+router.post('/conversation/streamChat', ConversationController.streamingConversation)
 
 
 // get conversations ID of user
