@@ -2,10 +2,10 @@
 
 const userModel = require("../models/user.model.js");
 const userInfoModel = require("../models/user_info.model.js");
-const { OtpService } = require("./otp.service.js");
+const { MailService } = require("./mail.service.js");
 const bcrypt = require("bcrypt");
 const keytokenModel = require("../models/keytoken.model");
-const { createToken, verifyRefreshToken, verifyToken} = require("../auth/authUtils");
+const { createToken, verifyRefreshToken, verifyToken } = require("../auth/authUtils");
 const { getInfoData } = require("../utils/index.js");
 // AI Service API
 require('dotenv').config()
@@ -38,7 +38,7 @@ class AccessService {
 
             userInfo.user = newAccount._id;
             await userInfo.save();
-            
+
             if (newAccount) {
                 return { code: 201, message: "Đăng ký tài khoản thành công" };
             } else {
@@ -97,17 +97,17 @@ class AccessService {
         }
     }
 
-    static logout = () => {
-        return {
-            code: 200,
-            message: "Đăng xuất tài khoản thành công"
+    static logout = async ({ refreshToken }) => {
+        if (!refreshToken) {
+            return { code: 400, message: "No tokens provided" };
         }
+        await keytokenModel.findOneAndDelete({ refreshToken });
+        return { code: 200, message: "Đăng xuất thành công" };
     }
 
     static requestRefreshToken = async (req, res, next) => {
-
         const result = await verifyRefreshToken(req, res, next);
-        
+
         if (result.code === 200) {
             const newToken = await createToken(
                 {
@@ -150,21 +150,30 @@ class AccessService {
         }
     }
 
-    static resetPassword = async ({email, password}) => {
+    static changePassword = async ({ email, oldPassword, newPassword }) => {
         try {
-            const user = await userModel.findOne({ email});
-            if (!user) {
-                return { code: 404};
+            const user = await userModel.findOne({ email: email });
+            if(!user) {
+                return { code: 404, message: "Vui lòng điền lại thông tin tài khoản" };
             }
-            const hashPassword = await bcrypt.hash(password, 10);
+            const verifyPassword = await bcrypt.compare(
+                oldPassword,
+                user.password
+            )
+            // Check user account
+            if (!verifyPassword) {
+                return { code: 404, message: "Vui lòng điền lại thông tin tài khoản" };
+            }
+            const hashPassword = await bcrypt.hash(newPassword, 10);
             await userModel.findOneAndUpdate({ email: email }, { password: hashPassword });
-            return { code: 200};
+            await MailService.sendMailChangePassword(email);
+            return { code: 200, message: "Đổi mật khẩu thành công" };
         }
-        catch(error){
-            console.error(error);
-            return { code: 500};
+        catch (error) {
+                console.error(error);
+                return { code: 500 };
+            }
         }
-    }
 
 
     static verifyAdmin = async (req, res, next) => {
@@ -187,7 +196,7 @@ class AccessService {
             }
         }
     }
-    
+
 }
 
 module.exports = {

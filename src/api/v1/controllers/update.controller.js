@@ -5,7 +5,6 @@ const { UpdateService } = require('../services/update.service');
 class UpdateController {
     updateAccount = async (req, res, next) => {
         try {
-            console.log("request body", req.body);
             const updateResult = await UpdateService.updateAccount(req.body);
             res.status(updateResult.code).json(updateResult);
         } catch (error) {

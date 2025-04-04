@@ -21,7 +21,7 @@ class AccessController {
     }
     logout = async (req, res, next) => {
         try {
-            const logoutResult = await AccessService.logout();
+            const logoutResult = await AccessService.logout(req.body);
             res.status(logoutResult.code).json(logoutResult);
         } catch (error) {
             next(error);
@@ -43,9 +43,9 @@ class AccessController {
             next(error);
         }
     }
-    resetPassword = async (req, res, next) => {
+    changePassword = async (req, res, next) => {
         try {
-            const resetResult = await AccessService.resetPassword(req.body);
+            const resetResult = await AccessService.changePassword(req.body);
             res.status(resetResult.code).json(resetResult);
         } catch (error) {
             next(error);

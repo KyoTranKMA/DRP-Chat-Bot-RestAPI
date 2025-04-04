@@ -1,24 +1,20 @@
 'use strict'
 
 const express = require('express')
+const validate = require('../../middlewares/validate');
+const authValidation = require('../../validations/auth.validation');
+const userValidation = require('../../validations/user.validation');
 const AccessController = require('../../controllers/access.controller')
 const UpdateController = require('../../controllers/update.controller.js')
-const OtpController = require('../../controllers/otp.controller.js')
+const MailController = require('../../controllers/mail.controller.js')
 const router = express.Router()
 
 
-// Test admin auth
-router.get('/admin', AccessController.verifyAdmin, (req, res, next) => {
-    return res.status(200).json({
-        message: 'Authen Succesfully',
-        status: 'OK'
-    })
-})
 
 //sign Up 
-router.post('/sign-up', AccessController.signUp)
+router.post('/sign-up', validate(authValidation.signUp), AccessController.signUp)
 // Update Info of Account
-router.post('/account/updateInfo',
+router.post('/account/updateInfo', validate(userValidation.updateAccount),
     UpdateController.updateAccount
 )
 // get Info of Accounts
@@ -26,20 +22,20 @@ router.post('/account/getInfo',
     UpdateController.getInfoAccount
 )
 // login 
-router.post('/login', AccessController.login)
+router.post('/login', validate(authValidation.login), AccessController.login)
 // logout  
-router.post('/logout', AccessController.logout)
+router.post('/logout', validate(authValidation.logout),AccessController.logout)
 // authenticate token
 router.get('/authenticate', AccessController.authenToken)
 // refresh token
-router.get('/refreshToken', AccessController.requestRefreshToken)
+router.get('/refreshToken', validate(authValidation.refreshToken),AccessController.requestRefreshToken)
 // send otp for sign-up
-router.post('/sendOTP', OtpController.sendOTPSignUp);
+router.post('/sendOTP', MailController.sendOTPSignUp);
 // reset password
-router.post('/reset/password', AccessController.resetPassword);
+router.post('/change/password', validate(authValidation.changePassword), AccessController.changePassword);
 // get otp for reset password
-router.post('/reset/getOTP', OtpController.sendOTPForgotPassword)
+router.post('/reset/password/getOTP', validate(authValidation.verifyEmail),MailController.sendOTPForgotPassword)
 // verify OTPs
-router.post('/verifyOTP', OtpController.verifyOTP);
+router.post('/verifyOTP', validate(authValidation.verifyOTP),MailController.verifyOTP);
 
 module.exports = router
