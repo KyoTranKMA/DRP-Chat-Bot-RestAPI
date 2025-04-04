@@ -1,11 +1,11 @@
 'use strict';
 
-const { OtpService } = require('../services/otp.service');
+const { MailService } = require('../services/mail.service');
 
-class OtpController {
+class MailController {
     sendOTPSignUp = async (req, res, next) => {
         try {
-            const sendOTPResult = await OtpService.sendOTPSignUp(req.body);
+            const sendOTPResult = await MailService.sendOTPSignUp(req.body);
             res.status(sendOTPResult.code).json(sendOTPResult);
         } catch (error) {
             next(error);
@@ -13,7 +13,7 @@ class OtpController {
     }
     sendOTPForgotPassword = async (req, res, next) => {
         try {
-            const sendOTPResult = await OtpService.sendOTPForgotPassword(req.body);
+            const sendOTPResult = await MailService.sendOTPForgotPassword(req.body);
             res.status(sendOTPResult.code).json(sendOTPResult);
         } catch (error) {
             next(error);
@@ -21,7 +21,7 @@ class OtpController {
     }
     verifyOTP = async (req, res, next) => {
         try {
-            const verifyOTPResult = await OtpService.verifyOTP(req.body);
+            const verifyOTPResult = await MailService.verifyOTP(req.body);
             res.status(verifyOTPResult.code).json(verifyOTPResult);
         } catch (error) {
             next(error);
@@ -30,4 +30,4 @@ class OtpController {
 
 }
 
-module.exports = new OtpController();
+module.exports = new MailController();
