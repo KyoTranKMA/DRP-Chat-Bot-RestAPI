@@ -54,15 +54,21 @@ class AccessService {
         try {
             // Find the user in the database
             const user = await userModel.findOne({ username: username });
+            
+            // Check user account
+            if (!user) {
+                return { code: 404, message: "Vui lòng điền lại thông tin tài khoản" };
+            }
 
             const verifyPassword = await bcrypt.compare(
                 password,
                 user.password
             )
-            // Check user account
+
             if (!user || !verifyPassword) {
                 return { code: 404, message: "Vui lòng điền lại thông tin tài khoản" };
             }
+
 
             // Create Access token for user
             const tokens = await createToken({
@@ -153,7 +159,7 @@ class AccessService {
     static changePassword = async ({ email, oldPassword, newPassword }) => {
         try {
             const user = await userModel.findOne({ email: email });
-            if(!user) {
+            if (!user) {
                 return { code: 404, message: "Vui lòng điền lại thông tin tài khoản" };
             }
             const verifyPassword = await bcrypt.compare(
@@ -170,10 +176,10 @@ class AccessService {
             return { code: 200, message: "Đổi mật khẩu thành công" };
         }
         catch (error) {
-                console.error(error);
-                return { code: 500 };
-            }
+            console.error(error);
+            return { code: 500 };
         }
+    }
 
 
     static verifyAdmin = async (req, res, next) => {
