@@ -540,7 +540,107 @@ paths:
           description: ID không hợp lệ
         '500':
           description: Lỗi server
-          
+  /conversation/streamChat:
+    post:
+      summary: Truyền câu hỏi và nhận câu trả lời dưới dạng streaming với chatbot
+      description: |
+        Khởi tạo hoặc tiếp tục một cuộc trò chuyện với chatbot bằng cách sử dụng Server-Sent Events (SSE) để nhận phản hồi theo thời gian thực.
+      operationId: streamConversation
+      tags:
+        - Conversation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StreamChatRequest'
+            example:
+              id: "66599eb8982ed93d46fc3dba"
+              conversation_id: "67ed5b1cacb1492db043c5a5"
+              query: "Chào cu em, cu em hay gioi thieu ve minh khoang 500 từ đi"
+      responses:
+        '200':
+          description: Successful response with streaming data
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: text/event-stream
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: "*"
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: "GET, POST, OPTIONS"
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: "86400"
+          content:
+            text/event-stream:
+              schema:
+                type: string
+              example: |
+                data: {"id":"chatcmpl-1743763413144","object":"chat.completion.chunk","created":1743763413,"model":"coze-model","choices":[{"index":0,"delta":{"content":"{\"output\":\"Chào bạn, mình là Sen - nhân viên tư vấn khách hàng của anh Diệu Mixue. Bạn cần cung cấp thông tin sản phẩm hay cần mình tư vấn gì ạ!\\n\\nVề câu hỏi của bạn, để mình kiểm tra thông tin nhé.\\n\\nHiện tại, bên mình vẫn còn áo hoodies với nhiều mẫu mã và kích cỡ khác nhau. Bạn có thể cho mình biết thêm về màu sắc, kiểu dáng hoặc kích cỡ bạn đang tìm kiếm để mình có thể hỗ trợ bạn tốt hơn không ạ?\"}"},"finish_reason":null}]}
+
+                data: {"id":"chatcmpl-1743763413147","object":"chat.completion.chunk","created":1743763413,"model":"coze-model","choices":[{"index":0,"delta":{},"finish_reason":"stop"}]}
+
+                data: [DONE]
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatCompletion'
+              example:
+                id: "chatcmpl-1743763413144"
+                object: "chat.completion"
+                created: 1743763413
+                model: "coze-model"
+                choices:
+                  - index: 0
+                    message:
+                      role: "assistant"
+                      content: "Chào bạn, mình là Sen - nhân viên tư vấn khách hàng của anh Diệu Mixue. Bạn cần cung cấp thông tin sản phẩm hay cần mình tư vấn gì ạ!..."
+                    logprobs: null
+                    finish_reason: "stop"
+                usage:
+                  prompt_tokens: 100
+                  completion_tokens: 10
+                  total_tokens: 110
+                system_fingerprint: "fp_2f57f81c11"
+        '400':
+          description: Bad request, invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Invalid ID"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Internal server error"
+                message: "Unexpected response from Coze API"
   /v1/api/conversation/updateTitle:
     post:
       tags: 
@@ -966,6 +1066,105 @@ components:
         conversation_id:
           type: string
           example: 663b48fc09800f0e9bb8e758
+    StreamChatRequest:
+      type: object
+      required:
+        - id
+        - query
+      properties:
+        id:
+          type: string
+          description: User ID
+          example: "66599eb8982ed93d46fc3dba"
+        conversation_id:
+          type: string
+          description: Conversation ID (optional for new conversations)
+          example: "67ed5b1cacb1492db043c5a5"
+        query:
+          type: string
+          description: User message/query
+          example: "Chào cu em, cu em hay gioi thieu ve minh khoang 500 từ đi"
+    ChatMessage:
+      type: object
+      properties:
+        role:
+          type: string
+          enum: [user, assistant]
+          description: Role of the message sender
+        content:
+          type: string
+          description: Content of the message
+        content_type:
+          type: string
+          enum: [text]
+          default: text
+          description: Type of content in the message
+        type:
+          type: string
+          enum: [answer]
+          description: Type of assistant message
+    ChatCompletion:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique ID of the completion
+        object:
+          type: string
+          description: Object type
+        created:
+          type: integer
+          description: Unix timestamp when the completion was created
+        model:
+          type: string
+          description: Model used for completion
+        choices:
+          type: array
+          items:
+            type: object
+            properties:
+              index:
+                type: integer
+                description: Index of the choice
+              message:
+                type: object
+                properties:
+                  role:
+                    type: string
+                    description: Role of the message sender
+                  content:
+                    type: string
+                    description: Content of the message
+              logprobs:
+                type: object
+                nullable: true
+              finish_reason:
+                type: string
+                description: Reason for finishing
+        usage:
+          type: object
+          properties:
+            prompt_tokens:
+              type: integer
+              description: Number of tokens in the prompt
+            completion_tokens:
+              type: integer
+              description: Number of tokens in the completion
+            total_tokens:
+              type: integer
+              description: Total number of tokens used
+        system_fingerprint:
+          type: string
+          description: System fingerprint
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type or message
+        message:
+          type: string
+          description: Detailed error message
   securitySchemes:
     bearerAuth:          
       type: http

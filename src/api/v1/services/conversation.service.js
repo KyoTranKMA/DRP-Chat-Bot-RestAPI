@@ -197,7 +197,7 @@ class ConversationService {
       
       // Find the Conversation or create a new one and save user query
       let chatHistory = await HistoryConversationModel.findOne({ conversation_id: conversation_id });
-
+  
       if (!chatHistory) {
         let first_content = query.split(' ').slice(0, 6).join(' ');
         if (query.split(' ').length > 6) {
@@ -234,7 +234,7 @@ class ConversationService {
           { new: true }
         );
       }
-
+  
       // Request to Coze API
       const queryString = query || "Xin chào";
       const requestBody = {
@@ -245,8 +245,7 @@ class ConversationService {
         bot_id: BOT_ID,
         chat_history: chatHistory.chat_history
       };
-
-
+  
       // Set the appropriate headers for SSE
       res.setHeader("Content-Type", "text/event-stream");
       res.setHeader("Cache-Control", "no-cache");
@@ -260,19 +259,20 @@ class ConversationService {
         },
         body: JSON.stringify(requestBody)
       });
-
+  
       if (resp.headers.get('content-type')?.includes('text/event-stream')) {
         const stream = resp.body;
         let buffer = "";
         let completeMessage = "";
-
+        let followUpMessages = [];
+  
         stream.on("data", (chunk) => {
           buffer += chunk.toString();
           let lines = buffer.split("\n");
-
+  
           for (let i = 0; i < lines.length - 1; i++) {
             let line = lines[i].trim();
-
+  
             if (!line.startsWith("data:")) continue;
             line = line.slice(5).trim();
             let chunkObj;
@@ -288,35 +288,42 @@ class ConversationService {
             }
             
             if (chunkObj.event === "message") {
-              if (
-                chunkObj.message.role === "assistant" &&
-                chunkObj.message.type === "answer"
-              ) {
-                let chunkContent = chunkObj.message.content;
-                completeMessage += chunkContent;
-
-                if (chunkContent !== "") {
-                  const chunkId = `chatcmpl-${Date.now()}`;
-                  const chunkCreated = Math.floor(Date.now() / 1000);
-                  res.write(
-                    "data: " +
-                    JSON.stringify({
-                      id: chunkId,
-                      object: "chat.completion.chunk",
-                      created: chunkCreated,
-                      model: "coze-model",
-                      choices: [
-                        {
-                          index: 0,
-                          delta: {
-                            content: chunkContent,
+              if (chunkObj.message.role === "assistant") {
+                if (chunkObj.message.type === "answer") {
+                  let chunkContent = chunkObj.message.content;
+                  completeMessage += chunkContent;
+  
+                  if (chunkContent !== "") {
+                    const chunkId = `chatcmpl-${Date.now()}`;
+                    const chunkCreated = Math.floor(Date.now() / 1000);
+                    res.write(
+                      "data: " +
+                      JSON.stringify({
+                        id: chunkId,
+                        object: "chat.completion.chunk",
+                        created: chunkCreated,
+                        model: "coze-model",
+                        choices: [
+                          {
+                            index: 0,
+                            delta: {
+                              content: chunkContent,
+                            },
+                            finish_reason: null,
                           },
-                          finish_reason: null,
-                        },
-                      ],
-                    }) +
-                    "\n\n"
-                  );
+                        ],
+                      }) +
+                      "\n\n"
+                    );
+                  }
+                } else if (chunkObj.message.type === "follow_up") {
+                  // Store follow-up messages to be saved later
+                  followUpMessages.push({
+                    role: "assistant",
+                    type: "follow_up",
+                    content: chunkObj.message.content.trim(),
+                    content_type: chunkObj.message.content_type || "text"
+                  });
                 }
               }
             } else if (chunkObj.event === "done") {
@@ -343,30 +350,39 @@ class ConversationService {
               res.end();
   
               // Save assistant response to chat history after stream ends
-              if (completeMessage) {
-                const answerMessage = {
-                  role: "assistant",
-                  type: "answer",
-                  content: completeMessage.trim(),
-                  content_type: "text"
-                };
+              if (completeMessage || followUpMessages.length > 0) {
+                const messagesToSave = [];
+                
+                if (completeMessage) {
+                  messagesToSave.push({
+                    role: "assistant",
+                    type: "answer",
+                    content: completeMessage.trim(),
+                    content_type: "text"
+                  });
+                }
+                
+                // Add follow-up messages if any
+                if (followUpMessages.length > 0) {
+                  messagesToSave.push(...followUpMessages);
+                }
                 
                 HistoryConversationModel.findByIdAndUpdate(
                   chatHistory._id,
-                  { $push: { chat_history: answerMessage } }
+                  { $push: { chat_history: { $each: messagesToSave } } }
                 ).catch(err => console.error("Error saving response to history:", err));
               }
             } else if (chunkObj.event === "ping") {
               // Ignore ping events
             } else if (chunkObj.event === "error") {
               let errorMsg = chunkObj.code + " " + chunkObj.message;
-
+  
               if(chunkObj.error_information) {
                 errorMsg = chunkObj.error_information.err_msg;
               }
-
+  
               console.error('Error: ', errorMsg);
-
+  
               res.write(
                 `data: ${JSON.stringify({ error: {
                   error: "Unexpected response from Coze API.",
@@ -377,10 +393,10 @@ class ConversationService {
               res.end();
             }
           }
-
+  
           buffer = lines[lines.length - 1];
         });
-
+  
         stream.on("error", (error) => {
           console.error("Stream error:", error);
           res.write(
@@ -397,11 +413,16 @@ class ConversationService {
         
         if (data.code === 0 && data.msg === "success") {
           const messages = data.messages;
-          const answerMessage = messages.find(
+          
+          // Get both answer and follow_up messages
+          let assistantMessages = messages.filter(
             (message) =>
-              message.role === "assistant" && message.type === "answer"
+              message.role === "assistant" &&
+              (message.type === "answer" || message.type === "follow_up")
           );
-
+  
+          const answerMessage = assistantMessages.find(message => message.type === "answer");
+          
           if (answerMessage) {
             const result = answerMessage.content.trim();
             const usageData = {
@@ -411,7 +432,7 @@ class ConversationService {
             };
             const chunkId = `chatcmpl-${Date.now()}`;
             const chunkCreated = Math.floor(Date.now() / 1000);
-
+  
             const formattedResponse = {
               id: chunkId,
               object: "chat.completion",
@@ -432,19 +453,17 @@ class ConversationService {
               system_fingerprint: "fp_2f57f81c11",
             };
             
-            // Save response to chat history
+            // Save response to chat history (both answer and follow_up)
+            const messagesToSave = assistantMessages.map(message => ({
+              role: "assistant",
+              type: message.type,
+              content: message.content.trim(),
+              content_type: message.content_type || "text"
+            }));
+            
             HistoryConversationModel.findByIdAndUpdate(
               chatHistory._id,
-              {
-                $push: {
-                  chat_history: {
-                    role: "assistant",
-                    type: "answer",
-                    content: result,
-                    content_type: "text"
-                  }
-                }
-              }
+              { $push: { chat_history: { $each: messagesToSave } } }
             ).catch(err => console.error("Error saving response to history:", err));
             
             const jsonResponse = JSON.stringify(formattedResponse, null, 2);
