@@ -15,7 +15,7 @@ class AccessService {
             // Check if account exists
             const existingUsername = await userModel.findOne({ username });
             if (existingUsername) {
-                return { code: 400, message: "Tên tài khoản đã tồn tại" };
+                return { code: 403, message: "Tên tài khoản đã tồn tại" };
             }
 
             const existingEmail = await userModel.findOne({ email });

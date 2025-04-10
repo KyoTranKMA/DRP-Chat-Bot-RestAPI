@@ -1,13 +1,13 @@
 openapi: 3.0.3
 info:
-  title: API Documentation Nhóm 2
+  title: API Documentation Chat Bot Hỗ Trợ Khách Hàng
   description: Chi tiết về API để implment cho dự án
   version: 1.0.0
 servers:
-  -  url: https://drpteam.up.railway.app
-  -  url: https://drpteam.zeabur.app
-  -  url: https://drpteam.vercel.app
-  -  url: https://drpteambackup.vercel.app
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/QUANGDIEU1009/CustomerAsstaintAPIDocument/1.0.0
+  -  url: https://customer-support-chatbot-api.onrender.com/
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/TranQuangDieu/API_Doc_Mobile_App/1.0.0
@@ -39,7 +39,9 @@ paths:
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/loginSucces'      
+                $ref: '#/components/schemas/loginSucces'  
+        '400':
+          description: Gửi request không đúng 
         '404':
           description: Tài khoản không chính xác
           content:
@@ -94,6 +96,16 @@ paths:
                     type: string
                     example: Đăng ký thành công
         '400':
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ thường và số
+        '403':
           description: Đăng ký thất bại
           content:
             application/json:
@@ -234,7 +246,7 @@ paths:
                   message:
                     type: string
                     example: Gửi mã OTP không thành công
-  /v1/api/reset/getOTP:
+  /v1/api/reset/password/getOTP:
     post:
       tags:
         - users
@@ -279,7 +291,7 @@ paths:
                   message:
                     type: string
                     example: Gửi mã OTP không thành công
-  /v1/api/reset/password:
+  /v1/api/change/password:
     post:
       tags:
         - users
@@ -487,7 +499,7 @@ paths:
                           example: 664e304950b332707fb0bbe0
                         title:
                           type: string
-                          example: Cho toi cong thuc nau ga
+                          example: Chào bạn tôi cần tư vấn
                         updated_at:
                           type: string
                           example:
@@ -528,13 +540,13 @@ paths:
               example:
                 messages::
                 - type: "answer"
-                  content: "Xin chào! Tôi là Trợ lý Dinh dưỡng. Tôi có thể giúp bạn với các câu hỏi về dinh dưỡng và chế độ ăn uống. Hãy cho tôi biết nếu bạn có bất kỳ câu hỏi nào.?"
+                  content: "Chào bạn, mình là Sen - nhân viên tư vấn khách hàng của anh Diệu Mixue. Bạn cần cung cấp thông tin sản phẩm hay cần mình tư vấn gì ạ!"
                   content_type: "text"
                 - type: "follow_up"
-                  content: "Có thực phẩm nào giúp tăng cường sức đề kháng không?"
+                  content: "Câu hỏi gợi ý liên quan như: Tư vấn giúp mình món abcxyz:"
                   content_type: "text"
                 - type: "follow_up"
-                  content: "Bạn có thể giới thiệu một công thức nấu món gà nướng không?"
+                  content: "Shop còn món này size L không?"
                   content_type: "text"
         '404':
           description: ID không hợp lệ
@@ -727,151 +739,7 @@ paths:
           description: Conversation id không tồn tại       
         '500':
           description: Lỗi server
-  /v1/api/recipes/vn:
-    get:
-      tags:
-        - recipes
-      summary: Lấy tất cả công thức món ăn Việt Nam
-      description: Lấy danh sách công thức món ăn Việt Nam từ database để đưa vào knowledge base của chat bot
-      operationId: getRecipes
-      responses:
-        '200':
-          description: Lấy danh sách công thức thành công
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  name:
-                    type: string
-                    example: "Cơm Gà Xối Mỡ Sốt Mắm Tỏi"
-                  category:
-                    type: string
-                    example: "Món chính"
-                  ingredients:
-                    type: array
-                    items:
-                      type: object
-                    properties:
-                      name:
-                        type: string
-                      amount:
-                        type: string
-                    example:
-                      - name: "Đùi gà góc tư"
-                        amount: "2 cái"
-                      - name: "Gạo trắng"
-                        amount: "300gr"
-                      - name: "Hoa hồi"
-                        amount: "3gr"
-                      - name: "Quế cây"
-                        amount: "3gr"
-                      - name: "Đinh hương"
-                        amount: "2gr"
-                  instructions:
-                    type: array
-                    items:
-                      type: object
-                    properties:
-                      step:
-                        type: string
-                      content:
-                        type: string
-                    example: 
-                      - step: "1"
-                        content: "Rang thơm hoa hồi, quế khoảng 1 phút rồi cho đinh hương vào rang nhanh 10 giây. Cho các nguyên liệu vừa rang vào nồi nấu cùng 1 lít nước và vài củ hành tím cắt đôi, nêm 10gr hạt nêm, 2gr muối, đợi nước vừa sôi cho đùi gà vào luộc chín khoảng 15 đến 20 phút tùy độ lớn của đùi gà (để gà mềm không bỏ gà vào khi đang đông lạnh, để lửa nhỏ không để lửa quá lớn sẽ bị rách da gà) đem đùi gà ra để ráo, dùng kim nhỏ xăm nhẹ phần da cho đùi gà không bị đọng nước khi xối mỡ sẽ mau giòn và không bị bắn dầu."
-                      - step: "2"
-                        content: "Vo sạch 300gr gạo cho vào nồi, đong 300ml nước luộc gà vào nồi ( canh lượng nước vừa đủ nấu cơm tùy theo loại gạo) bấm nút và nấu chín. Sau khi cơm chín để cơm nguội đem cơm trộn với 2 lòng đỏ trứng gà và 1 muỗng canh tương ớt bóp tơi ra. cho 1 ít dầu tỏi vào chảo xào phần cơm cho hạt cơm rời ra dọn cơm ra đĩa. ( phần nước luộc gà còn dư bạn có thể nêm nếm lại vừa ăn thêm rong biển, thịt bằm, tiêu và hành ngò sẽ có một món canh rất thơm ngon và đậm đà)."
-        '500':
-          description: Lỗi server
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Lỗi server
-  /v1/api/recipes/vn/paging:
-    get:
-      tags:
-        - recipes
-      summary: Lấy công thức món ăn Việt Nam theo trang
-      description: Lấy danh sách công thức món ăn Việt Nam từ database để đưa vào knowledge base của chat bot theo từng trang
-      operationId: getRecipesPaging
-      parameters:
-        - name: page
-          in: query
-          description: Số trang cần lấy, mặc định là 1
-          required: false
-          schema:
-            type: integer
-            example: 1
-        - name: limit
-          in: query
-          description: Số lượng công thức món ăn cần lấy, mặc định là 20
-          required: false
-          schema:
-            type: integer
-            example: 10
-      responses:
-        '200':
-          description: Lấy danh sách công thức thành công
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  name:
-                    type: string
-                    example: "Cơm Gà Xối Mỡ Sốt Mắm Tỏi"
-                  category:
-                    type: string
-                    example: "Món chính"
-                  ingredients:
-                    type: array
-                    items:
-                      type: object
-                    properties:
-                      name:
-                        type: string
-                      amount:
-                        type: string
-                    example:
-                      - name: "Đùi gà góc tư"
-                        amount: "2 cái"
-                      - name: "Gạo trắng"
-                        amount: "300gr"
-                      - name: "Hoa hồi"
-                        amount: "3gr"
-                      - name: "Quế cây"
-                        amount: "3gr"
-                      - name: "Đinh hương"
-                        amount: "2gr"
-                  instructions:
-                    type: array
-                    items:
-                      type: object
-                    properties:
-                      step:
-                        type: string
-                      content:
-                        type: string
-                    example: 
-                      - step: "1"
-                        content: "Rang thơm hoa hồi, quế khoảng 1 phút rồi cho đinh hương vào rang nhanh 10 giây. Cho các nguyên liệu vừa rang vào nồi nấu cùng 1 lít nước và vài củ hành tím cắt đôi, nêm 10gr hạt nêm, 2gr muối, đợi nước vừa sôi cho đùi gà vào luộc chín khoảng 15 đến 20 phút tùy độ lớn của đùi gà (để gà mềm không bỏ gà vào khi đang đông lạnh, để lửa nhỏ không để lửa quá lớn sẽ bị rách da gà) đem đùi gà ra để ráo, dùng kim nhỏ xăm nhẹ phần da cho đùi gà không bị đọng nước khi xối mỡ sẽ mau giòn và không bị bắn dầu."
-                      - step: "2"
-                        content: "Vo sạch 300gr gạo cho vào nồi, đong 300ml nước luộc gà vào nồi ( canh lượng nước vừa đủ nấu cơm tùy theo loại gạo) bấm nút và nấu chín. Sau khi cơm chín để cơm nguội đem cơm trộn với 2 lòng đỏ trứng gà và 1 muỗng canh tương ớt bóp tơi ra. cho 1 ít dầu tỏi vào chảo xào phần cơm cho hạt cơm rời ra dọn cơm ra đĩa. ( phần nước luộc gà còn dư bạn có thể nêm nếm lại vừa ăn thêm rong biển, thịt bằm, tiêu và hành ngò sẽ có một món canh rất thơm ngon và đậm đà)."
-        '500':
-          description: Lỗi server
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Lỗi server
+  
 components:
   schemas:
     loginBody:
@@ -909,9 +777,6 @@ components:
             refreshToken:
               type: string
               example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imt5byIsImlhdCI6MTYyNzQwNjYwMH0.7
-        apiKeyAIService:
-          type: string
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
     signup:
       type: "object"
       properties:
@@ -936,9 +801,12 @@ components:
         email:
           type: "string"
           example: "Kyo@example.com"
-        password:
+        oldPassword:
           type: "string"
           example: "Dieudeptrai"
+        newPassword:
+          type: "string"
+          example: "Dieudeptraiso1TG"
     updateBody:
       type: object
       properties:
