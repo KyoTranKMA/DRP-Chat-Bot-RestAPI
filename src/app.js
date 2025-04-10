@@ -4,6 +4,11 @@ const { default: helmet } = require('helmet')
 const morgan = require('morgan')
 const app = express()
 const mongoose = require('./api/v1/databases/init.mongodb.js')
+// handle exceptions
+const httpStatus = require('http-status').default;
+const ApiError = require('./api/v1/utils/ApiError.js');
+const errorConverter = require('./api/v1/middlewares/error.middleware.js').errorConverter;
+const errorHandler = require('./api/v1/middlewares/error.middleware.js').errorHandler;
 
 // Swagger UI libs
 const yaml = require('yaml')
@@ -58,6 +63,15 @@ app.get('/docs', swaggerUi.setup(swaggerDocument, { customCssUrl: CSS_URL }));
 mongoose
 // init routes
 app.use('/', require('./api/v1/routes/index.js'));
+app.use(errorConverter);
+
+// Handle 404 for non-existent routes
+app.use((req, res, next) => {
+  next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
+});
+
+// Final error handler
+app.use(errorHandler);
 
 
 module.exports = app

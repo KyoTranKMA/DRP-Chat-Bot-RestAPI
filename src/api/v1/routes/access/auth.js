@@ -26,11 +26,11 @@ router.post('/login', validate(authValidation.login), AccessController.login)
 // logout  
 router.post('/logout', validate(authValidation.logout),AccessController.logout)
 // authenticate token
-router.get('/authenticate', AccessController.authenToken)
+router.get('/authenticate', validate(authValidation.token),AccessController.authenToken)
 // refresh token
-router.get('/refreshToken', validate(authValidation.refreshToken),AccessController.requestRefreshToken)
+router.get('/refreshToken', validate(authValidation.token),AccessController.requestRefreshToken)
 // send otp for sign-up
-router.post('/sendOTP', MailController.sendOTPSignUp);
+router.post('/sendOTP', validate(authValidation.verifyEmail),MailController.sendOTPSignUp);
 // reset password
 router.post('/change/password', validate(authValidation.changePassword), AccessController.changePassword);
 // get otp for reset password

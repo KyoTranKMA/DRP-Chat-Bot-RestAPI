@@ -22,9 +22,9 @@ const logout = {
   }),
 };
 
-const refreshToken = {
+const token = {
   header: Joi.object().keys({
-    refreshToken: Joi.string().required(),
+    token: Joi.string().required(),
   }),
 };
 
@@ -59,7 +59,7 @@ module.exports = {
   signUp,
   login,
   logout,
-  refreshToken,
+  token,
   forgotPassword,
   changePassword,
   verifyEmail,
