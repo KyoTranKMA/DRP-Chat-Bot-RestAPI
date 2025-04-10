@@ -7,9 +7,7 @@ const bcrypt = require("bcrypt");
 const keytokenModel = require("../models/keytoken.model");
 const { createToken, verifyRefreshToken, verifyToken } = require("../auth/authUtils");
 const { getInfoData } = require("../utils/index.js");
-// AI Service API
-require('dotenv').config()
-const COZE_API_KEY = process.env.COZE_API_KEY;
+
 
 class AccessService {
     static signUp = async ({ username, email, password }) => {
@@ -90,8 +88,7 @@ class AccessService {
                         fields: ['id', 'username', 'email'],
                         object: user
                     }),
-                    tokens,
-                    apiKeyAIService: COZE_API_KEY
+                    tokens
                 }
             }
             else {
@@ -144,8 +141,7 @@ class AccessService {
                 account: getInfoData({
                     fields: ['id', 'username', 'email'],
                     object: req.user
-                }),
-                apiKeyAIService: COZE_API_KEY
+                })
             }
         }
         else {
@@ -191,8 +187,7 @@ class AccessService {
                 account: getInfoData({
                     fields: ['id', 'username', 'email'],
                     object: req.user
-                }),
-                apiKeyAIService: COZE_API_KEY
+                })
             }
         }
         else {
