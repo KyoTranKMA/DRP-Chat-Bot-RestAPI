@@ -355,10 +355,12 @@ class ConversationService {
                 
                 if (completeMessage) {
                   messagesToSave.push({
+                    id: `chatcmpl-${Date.now()}`,
                     role: "assistant",
                     type: "answer",
                     content: completeMessage.trim(),
-                    content_type: "text"
+                    content_type: "text",
+                    createdAt: new Date()
                   });
                 }
                 

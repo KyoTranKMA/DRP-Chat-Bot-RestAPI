@@ -46,7 +46,11 @@ const historyConversationSchema = new mongoose.Schema(
         },
         chat_history: [
             {
-                _id: false,
+                id: {
+                    type: String,
+                    required: true,
+                    auto: true
+                },
                 role: {
                     type: String,
                     enum: ["user", "assistant"],
@@ -64,6 +68,10 @@ const historyConversationSchema = new mongoose.Schema(
                     type: String,
                     enum: ["text", "image", "video"],
                     default: "text"
+                },
+                createdAt: {
+                    type: Date,
+                    default: Date.now
                 }
             }
         ],
