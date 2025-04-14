@@ -46,6 +46,7 @@ const historyConversationSchema = new mongoose.Schema(
         },
         chat_history: [
             {
+                _id: false,
                 id: {
                     type: String,
                     required: true,
