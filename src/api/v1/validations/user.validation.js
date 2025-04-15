@@ -48,6 +48,7 @@ const deleteUser = {
 // Update Info of Account
 const updateAccount = {
   body: Joi.object().keys({
+    username: Joi.string(),
     name: Joi.string(),
     age: Joi.number(),
     height: Joi.number(),
