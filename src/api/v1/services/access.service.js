@@ -176,7 +176,22 @@ class AccessService {
             return { code: 500 };
         }
     }
-
+    static forgetPassword = async ({ email, newPassword }) => {
+        try {
+            const user = await userModel.findOne({ email: email });
+            if (!user) {
+                return { code: 404, message: "Vui lòng điền lại thông tin tài khoản" };
+            }
+            const hashPassword = await bcrypt.hash(newPassword, 10);
+            await userModel.findOneAndUpdate({ email: email }, { password: hashPassword });
+            await MailService.sendMailChangePassword(email);
+            return { code: 200, message: "Đổi mật khẩu thành công" };
+        }
+        catch (error) {
+            console.error(error);
+            return { code: 500 };
+        }
+    }
 
     static verifyAdmin = async (req, res, next) => {
         const result = await verifyToken(req, res, next);

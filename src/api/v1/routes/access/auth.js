@@ -31,10 +31,13 @@ router.get('/authenticate', validate(authValidation.token),AccessController.auth
 router.get('/refreshToken', validate(authValidation.token),AccessController.requestRefreshToken)
 // send otp for sign-up
 router.post('/sendOTP', validate(authValidation.verifyEmail),MailController.sendOTPSignUp);
-// reset password
-router.post('/change/password', validate(authValidation.changePassword), AccessController.changePassword);
 // get otp for reset password
 router.post('/reset/password/getOTP', validate(authValidation.verifyEmail),MailController.sendOTPForgotPassword)
+// reset password
+router.post('/change/password', validate(authValidation.changePassword), AccessController.changePassword);
+// forget password
+router.post('/reset/password', validate(authValidation.forgetPassword), AccessController.forgetPassword);
+
 // verify OTPs
 router.post('/verifyOTP', validate(authValidation.verifyOTP),MailController.verifyOTP);
 
