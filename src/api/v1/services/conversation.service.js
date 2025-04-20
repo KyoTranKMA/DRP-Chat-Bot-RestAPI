@@ -42,9 +42,6 @@ class ConversationService {
       }
       const conversations = await HistoryConversationModel.find({ user: userID }).sort({ updatedAt: -1 });
 
-      if (conversations.length === 0) {
-        return { code: 404 };
-      }
       const formattedConversations = conversations.map(conversation => {
         let date = new Date(conversation.updatedAt);
         let formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()} ${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
